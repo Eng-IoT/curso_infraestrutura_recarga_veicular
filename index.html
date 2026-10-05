@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#39ff14">
+<meta name="description" content="Formação Profissional em Projetos de Infraestrutura de Recarga Veicular">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+<title>Projetista de Infraestrutura de Recarga Veicular</title>
+</head>
+<body>
+<div id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="assets/logo-joelson.jpeg" alt="Joelson Mendes">
+      <div><strong>FORMAÇÃO</strong><small>RECARGA VEICULAR</small></div>
+    </div>
+    <div class="side-progress">
+      <div class="ring" id="progressRing"><span id="progressPct">0%</span></div>
+      <div><strong>Seu progresso</strong><small id="progressText">0 de 20 aulas</small></div>
+    </div>
+    <nav>
+      <button class="nav-item active" data-view="home">⌂ <span>Início</span></button>
+      <button class="nav-item" data-view="course">▦ <span>Microaulas</span></button>
+      <button class="nav-item" data-view="project">⌘ <span>Projeto Final</span></button>
+      <button class="nav-item" data-view="certificate">▤ <span>Certificado</span></button>
+      <button class="nav-item reward" data-view="reward">⚡ <span>SAVE Engenharia</span><em id="rewardLock">🔒</em></button>
+    </nav>
+    <div class="sidebar-foot">
+      <span class="online-dot"></span> Progresso salvo neste dispositivo
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button id="menuBtn" class="icon-btn">☰</button>
+      <div>
+        <h1 id="pageTitle">Formação Profissional</h1>
+        <p id="pageSubtitle">Projetos de Infraestrutura de Recarga Veicular</p>
+      </div>
+      <button class="btn outline" id="continueBtn">Continuar curso →</button>
+    </header>
+
+    <section id="view-home" class="view active">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="kicker">80 HORAS • 20 MICROAULAS • PROJETO APLICADO</span>
+          <h2>Projetista de <span>Infraestrutura de Recarga Veicular</span></h2>
+          <p>Do levantamento da instalação à curva de carga, DLM, dimensionamento, documentação e entrega do projeto.</p>
+          <div class="hero-actions">
+            <button class="btn primary" id="startBtn">Iniciar formação</button>
+            <button class="btn dark" data-go="course">Ver microaulas</button>
+          </div>
+          <div class="trust-row">
+            <span>✓ Simuladores</span><span>✓ Projeto final</span><span>✓ Certificado</span><span>✓ SAVE Engenharia</span>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="assets/capa-curso.png" alt="Infraestrutura de recarga veicular">
+        </div>
+      </div>
+
+      <div class="stats">
+        <article><strong>20</strong><span>Microaulas</span></article>
+        <article><strong>80 h</strong><span>Carga horária</span></article>
+        <article><strong>1</strong><span>Projeto profissional</span></article>
+        <article class="green"><strong>+ APP</strong><span>Desbloqueio final</span></article>
+      </div>
+
+      <div class="section-head">
+        <div><span class="kicker">TRILHA DE APRENDIZAGEM</span><h3>Aprenda construindo um projeto real</h3></div>
+        <button class="link-btn" data-go="course">Ver todas →</button>
+      </div>
+      <div id="homeLessons" class="lesson-grid"></div>
+
+      <div class="reward-banner">
+        <div class="reward-icon">⚡</div>
+        <div><span class="kicker">BENEFÍCIO DE CONCLUSÃO</span><h3>SAVE Engenharia — Aplicativo Profissional</h3>
+          <p>Conclua as 20 microaulas e entregue o Projeto Final para liberar a ferramenta profissional.</p></div>
+        <div class="reward-status" id="homeRewardStatus">🔒 Bloqueado</div>
+      </div>
+    </section>
+
+    <section id="view-course" class="view">
+      <div class="section-head">
+        <div><span class="kicker">80 HORAS</span><h2>Microaulas</h2><p>4 horas por microaula • teoria + prática + projeto</p></div>
+      </div>
+      <div id="courseLessons" class="lesson-list"></div>
+    </section>
+
+    <section id="view-lesson" class="view lesson-view">
+      <article id="lessonArticle"></article>
+      <div class="lesson-end-nav" id="lessonEndNav"></div>
+    </section>
+
+    <section id="view-project" class="view">
+      <div class="project-hero">
+        <span class="kicker">PROJETO INTEGRADOR</span>
+        <h2>Projeto Final — Infraestrutura de Recarga Veicular</h2>
+        <p>O aluno deve consolidar todo o percurso em uma entrega técnica que possa integrar seu portfólio profissional.</p>
+      </div>
+      <div class="project-grid">
+        <article class="panel">
+          <h3>Entregáveis mínimos</h3>
+          <div class="deliverables" id="deliverables"></div>
+        </article>
+        <article class="panel">
+          <h3>Status da entrega</h3>
+          <div class="project-status-box">
+            <div id="projectBigStatus" class="big-lock">🔒</div>
+            <p>Marque todos os entregáveis abaixo e confirme a entrega do projeto.</p>
+            <button class="btn primary full" id="submitProjectBtn">Confirmar Projeto Final</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="view-certificate" class="view">
+      <div id="certificateLocked" class="locked-screen">
+        <div>▤</div><h2>Certificado bloqueado</h2><p>Conclua a formação e o projeto final.</p>
+      </div>
+      <div id="certificateReady" class="certificate-wrap hidden">
+        <div class="certificate" id="certificate">
+          <div class="cert-top"><img src="assets/logo-joelson.jpeg"><span>CERTIFICADO DE CONCLUSÃO</span></div>
+          <h2>Formação Profissional em<br><b>Projetos de Infraestrutura de Recarga Veicular</b></h2>
+          <p>Certificamos que</p>
+          <h3 id="certName">Aluno(a)</h3>
+          <p>concluiu a formação com carga horária total de <b>80 horas</b>, abrangendo análise de demanda, curva de carga, dimensionamento, proteções, DLM, documentação e projeto aplicado.</p>
+          <div class="cert-sign"><div><b>Joelson Mendes</b><span>Especialista em Energia, IoT e Indústria 4.0</span></div><div><b>80 horas</b><span>Carga horária</span></div></div>
+        </div>
+        <div class="certificate-actions">
+          <label>Nome do aluno<input id="studentName" placeholder="Digite o nome completo"></label>
+          <button class="btn primary" id="printCertBtn">Imprimir / Salvar PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-reward" class="view">
+      <div id="rewardLocked" class="locked-screen">
+        <div>⚡</div><h2>SAVE Engenharia bloqueado</h2>
+        <p>Conclua as 20 microaulas e confirme o Projeto Final para liberar o acesso profissional.</p>
+        <div class="unlock-progress"><span id="unlockText">0/20 aulas</span><div><i id="unlockBar"></i></div></div>
+      </div>
+      <div id="rewardReady" class="reward-ready hidden">
+        <span class="kicker">BENEFÍCIO LIBERADO</span>
+        <h2>Parabéns! Seu acesso ao <span>SAVE Engenharia</span> está liberado.</h2>
+        <p>Use a ferramenta como apoio aos seus projetos profissionais. Continue aplicando os fundamentos aprendidos e valide sempre as condições reais da instalação e as normas vigentes.</p>
+        <a class="btn primary big" href="https://saevengenharia.vercel.app/" target="_blank" rel="noopener">Abrir SAVE Engenharia ↗</a>
+        <div class="reward-device"><img src="assets/save-ferramenta.png" alt="SAVE Engenharia"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="stickyLessonNav" class="sticky-lesson-nav hidden"></div>
+<div id="toast" class="toast"></div>
+
+<script src="course-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
