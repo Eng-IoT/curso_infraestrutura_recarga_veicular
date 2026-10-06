@@ -1,7 +1,7 @@
 
 const lessons=window.COURSE_LESSONS;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const STORAGE='curso-recarga-veicular-v2';
+const STORAGE='curso-recarga-veicular-v4';
 let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||{completed:[],quiz:{},projectChecks:{},projectSubmitted:false,lastLesson:1,studentName:''};
 let currentLesson=null;
 
@@ -33,7 +33,7 @@ function renderCards(){
 }
 function renderReferences(list=[]){
   if(!list.length) return '';
-  return `<section class="lesson-section"><h3>Fontes técnicas consultadas</h3><div class="ref-grid">${list.map(([label,url])=>`<a class="ref-chip" href="${url}" target="_blank" rel="noopener">${label}</a>`).join('')}</div></section>`;
+  return `<section class="lesson-section"><h3>Fontes técnicas consultadas</h3><div class="ref-grid">${list.map(([label,url])=>url.startsWith('source:')?`<span class="ref-chip source-ref">${label}</span>`:`<a class="ref-chip" href="${url}" target="_blank" rel="noopener">${label}</a>`).join('')}</div></section>`;
 }
 function renderNorms(list=[]){
   if(!list.length) return '';
@@ -46,6 +46,11 @@ function renderHighlights(list=[]){
 function renderSupportImage(l){
   if(!l.supportImage) return '';
   return `<section class="lesson-section"><h3>Material visual de apoio</h3><figure class="support-figure"><img src="assets/${l.supportImage}" alt="${l.supportCaption||''}"><figcaption>${l.supportCaption||''}</figcaption></figure></section>`;
+}
+
+function renderManufacturerCase(c){
+  if(!c) return '';
+  return `<section class="lesson-section manufacturer-case"><div class="case-head"><span>ESTUDO DE CASO DE FABRICANTE</span><h3>${c.title}</h3></div><div class="technical-body">${c.html}</div><div class="case-source"><b>Fonte-base:</b> ${c.source}<br><b>Uso didático:</b> ${c.note}</div></section>`;
 }
 
 function renderTechnicalSections(list=[]){
@@ -63,6 +68,7 @@ function simulatorHTML(type){
   if(type==='shortcircuit') return head('Corrente de curto-circuito simplificada','Use para aprendizado. Estudos executivos podem exigir modelo completo da rede.')+`<div class="sim-grid"><label>Tensão (V)<input id="sV" type="number" value="220"></label><label>Impedância equivalente Z (Ω)<input id="sZ" type="number" value="0.05" step="0.001"></label><label>Tipo de falta<select id="sType"><option value="mono">Fase-neutro / monofásica</option><option value="tri">Trifásica</option></select></label><label>Capacidade do disjuntor (kA)<input id="sIcu" type="number" value="6" step="0.1"></label></div><button class="btn primary sim-calc" data-sim="shortcircuit">Calcular Icc</button><div class="sim-result" id="simResult"></div></section>`;
   if(type==='transformer') return head('Transformador e balanceamento','Avalie carga aparente total e distribuição de carregadores monofásicos.')+`<div class="sim-grid"><label>Transformador (kVA)<input id="tKva" type="number" value="225"></label><label>Demanda existente (kW)<input id="tBase" type="number" value="150"></label><label>FP existente<input id="tFp" type="number" value="0.95" step="0.01"></label><label>Potência SAVE gerenciada (kW)<input id="tEv" type="number" value="60"></label><label>FP SAVE<input id="tEvFp" type="number" value="0.99" step="0.01"></label><label>Carregadores fase R<input id="tR" type="number" value="4"></label><label>Carregadores fase S<input id="tS" type="number" value="4"></label><label>Carregadores fase T<input id="tT" type="number" value="4"></label></div><button class="btn primary sim-calc" data-sim="transformer">Avaliar sistema</button><div class="sim-result" id="simResult"></div></section>`;
   if(type==='energisa') return head('Checklist Energisa / pré-validação','Marque os itens principais antes de organizar o protocolo.')+`<div class="sim-checks" id="eChecks">${['Ficha técnica dos SAVE','Curva/demanda','Diagrama unifilar','Memorial de cálculo','Proteções DR/RDC-DD/DPS','Aterramento','Dados da entrada/transformador','ART/TRT e documentos','Versão vigente NDU 042'].map(x=>`<label><input type="checkbox"> ${x}</label>`).join('')}</div><button class="btn primary sim-calc" data-sim="energisa">Verificar checklist</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='condo') return head('Planejamento de condomínio','Compare potência instalada futura, capacidade disponível e limite de DLM.')+`<div class="sim-grid"><label>Unidades/vagas previstas<input id="coUnits" type="number" value="40"></label><label>VE atuais<input id="coNow" type="number" value="6"></label><label>VE previstos em 5 anos<input id="coFuture" type="number" value="24"></label><label>Potência por SAVE (kW)<input id="coP" type="number" value="7.4" step="0.1"></label><label>Limite da instalação (kW)<input id="coLim" type="number" value="200"></label><label>Pico base (kW)<input id="coBase" type="number" value="150"></label><label>Reserva operacional (kW)<input id="coRes" type="number" value="10"></label></div><button class="btn primary sim-calc" data-sim="condo">Avaliar expansão</button><div class="sim-result" id="simResult"></div></section>`;
   return '';
 }
 function bindSimulator(type){
@@ -90,6 +96,11 @@ function runSimulator(type){
     const I=n('vI'),L=n('vL'),S=n('vS'),V=n('vV'),ph=n('vPh'),rho=n('vRho');
     const dv=ph===3?Math.sqrt(3)*L*I*rho/S:2*L*I*rho/S, pct=100*dv/V;
     simOut(`<b>ΔV:</b> ${dv.toFixed(2)} V<br><b>ΔV%:</b> ${pct.toFixed(2)}%<br><span>Estimativa resistiva. Verifique resistência à temperatura de operação e critérios normativos do projeto completo.</span>`);
+  } else if(type==='condo'){
+    const units=n('coUnits'),now=n('coNow'),future=n('coFuture'),p=n('coP'),lim=n('coLim'),base=n('coBase'),res=n('coRes');
+    const installedNow=now*p,installedFuture=future*p,available=Math.max(0,lim-base-res),simultaneous=available/p;
+    const coverage=units>0?100*future/units:0;
+    simOut(`<b>Potência instalada atual:</b> ${installedNow.toFixed(1)} kW<br><b>Potência instalada futura:</b> ${installedFuture.toFixed(1)} kW<br><b>Margem instantânea disponível:</b> ${available.toFixed(1)} kW<br><b>Equivalente a ${simultaneous.toFixed(1)} SAVE de ${p.toFixed(1)} kW simultâneos</b><br><b>Adoção futura considerada:</b> ${coverage.toFixed(0)}% das vagas/unidades<br><span>${installedFuture>available?'O cenário futuro exige gerenciamento de potência e/ou reforço de infraestrutura; dimensione a infraestrutura comum para expansão com critério.':'A margem informada suporta a potência futura neste ponto de análise, mas confirme curva de carga, circuitos e critérios normativos.'}</span>`);
   } else if(type==='protection'){
     const dc=document.getElementById('pDc').value,a=document.getElementById('pA').value,spda=document.getElementById('pSpda').value,far=document.getElementById('pFar').value;
     let dr='';
@@ -127,6 +138,7 @@ function openLesson(id){
       <section class="lesson-section"><h3>Atividade prática • Memória do Projeto</h3><div class="activity">${l.activity}</div></section>
       ${renderSupportImage(l)}
       ${renderTechnicalSections(l.technicalSections)}
+      ${renderManufacturerCase(l.manufacturerCase)}
       ${simulatorHTML(l.simulatorType)}
       <section class="lesson-section"><h3>Praticando • 05 questões</h3><div class="quiz">${qhtml}</div></section>
       ${renderReferences(l.references)}

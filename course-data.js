@@ -288,20 +288,24 @@ window.COURSE_LESSONS = [
     "id": 4,
     "num": "04",
     "title": "Levantamento da Instalação Existente",
-    "description": "Dados de campo necessários para avaliar viabilidade técnica e capacidade da instalação.",
+    "description": "Levantamento técnico, diagnóstico energético, capacidade da infraestrutura e preparação da vistoria para condomínios.",
     "image": "desafio-projeto.png",
     "objectives": [
       "Estruturar o levantamento de campo antes do dimensionamento.",
       "Separar dado medido, dado documental e dado estimado.",
       "Identificar limitações da entrada, quadros, alimentadores e espaço físico.",
-      "Criar checklist técnico de vistoria."
+      "Criar checklist técnico de vistoria.",
+      "Planejar uma campanha de medição representativa com analisador de energia.",
+      "Transformar a vistoria em diagnóstico técnico antes de qualquer proposta comercial."
     ],
     "theory": "<p>Projetos com múltiplos carregadores não começam no catálogo do fabricante; começam na <b>vistoria da instalação existente</b>. O levantamento precisa registrar tensão disponível, sistema de aterramento, capacidade da proteção geral, seções dos alimentadores, transformador, demanda contratada, medições históricas, espaço físico, ambiente de instalação e possibilidade de expansão.</p>\n <p>É essencial distinguir <b>dado comprovado</b> de <b>premissa adotada</b>. Placa do transformador, foto do QGBT, diagrama existente e relatório de medição são evidências. Estimativas de carga futura ou hipóteses de simultaneidade devem ser registradas como premissas. Essa transparência fortalece o memorial de cálculo e reduz questionamentos técnicos.</p>\n <p>Além dos aspectos elétricos, o levantamento deve avaliar rota dos eletrodutos, ventilação, proteção mecânica, distância até os pontos de recarga, zona de estacionamento e condições ambientais. Muitas reprovações ou retrabalhos decorrem justamente de informações de campo mal coletadas.</p>",
     "highlights": [
       "Sem levantamento confiável, o cálculo nasce fraco.",
       "Fotos, placas e diagramas são evidências técnicas valiosas.",
       "Espaço físico e rota de infraestrutura fazem parte do projeto.",
-      "Toda premissa deve ser identificada no memorial."
+      "Toda premissa deve ser identificada no memorial.",
+      "O e-book WEMOB usa uma semana de medição como boa prática de diagnóstico; no curso, o período deve ser representativo da operação.",
+      "Proposta comercial sem diagnóstico técnico aumenta o risco de subdimensionamento ou solução inadequada."
     ],
     "formula": "Capacidade disponível ≠ potência nominal da entrada  |  depende da carga existente e das restrições da instalação",
     "example": "Transformador de 225 kVA não significa 225 kVA livres. Se a instalação já opera com picos elevados, a margem restante pode ser pequena ou exigir DLM.",
@@ -321,6 +325,10 @@ window.COURSE_LESSONS = [
       [
         "NR-10 - Ministério do Trabalho",
         "https://www.gov.br/"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
@@ -374,7 +382,23 @@ window.COURSE_LESSONS = [
           "Somente a iluminação externa"
         ]
       ]
-    ]
+    ],
+    "technicalSections": [
+      {
+        "title": "Diagnóstico energético antes de especificar o SAVE",
+        "html": "<p>O estudo de caso WEMOB propõe uma visita técnica com levantamento do consumo real por analisadores de energia durante uma semana, com o objetivo de identificar a demanda do condomínio e a potência disponível. No curso, essa recomendação será tratada como <b>boa prática de diagnóstico</b>, e não como um prazo normativo universal.</p><p>O aluno deve aprender a definir um período de medição que represente a rotina real do empreendimento, registrar eventos atípicos e analisar <b>kW, kVA, fator de potência, tensão, corrente, demanda máxima, horários de pico e comportamento por fase</b>.</p>"
+      },
+      {
+        "title": "Checklist de vistoria para condomínio",
+        "html": "<div class=\"mini-checklist\"><span>Entrada de energia e medição</span><span>Transformador e demanda</span><span>QGBT e quadros existentes</span><span>Seções e rotas de alimentadores</span><span>Esquema de aterramento e PE</span><span>Espaço físico para QD-SAVE</span><span>Rotas de eletrodutos/eletrocalhas</span><span>Condições ambientais e proteção mecânica</span><span>Vagas atuais e expansão futura</span><span>Rede de dados / comunicação</span></div>"
+      }
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — diagnóstico WEMOB",
+      "html": "O guia recomenda que a infraestrutura seja analisada antes da oferta, incluindo medição real de consumo para estimar a demanda e a potência disponível. A plataforma transforma essa recomendação em procedimento técnico de levantamento e curva de carga.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 9, 18 e 30.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    }
   },
   {
     "id": 5,
@@ -480,7 +504,8 @@ window.COURSE_LESSONS = [
       "Diferenciar potência instalada de demanda.",
       "Estimar cenários com simultaneidade e diversidade.",
       "Relacionar perfil de uso à potência requerida.",
-      "Preparar o raciocínio para DLM e curva de carga."
+      "Preparar o raciocínio para DLM e curva de carga.",
+      "Projetar a infraestrutura para crescimento gradual da frota de veículos elétricos."
     ],
     "theory": "<p>Quando vários carregadores são instalados, a simples soma de potências nominais fornece a <b>potência instalada SAVE</b>, mas não descreve sozinha o comportamento real da instalação. O projetista precisa construir cenários coerentes com os horários, a permanência dos veículos, a política de uso e a existência ou não de gerenciamento dinâmico.</p>\n <p>Em condomínio residencial, é comum que nem todos os veículos iniciem a recarga ao mesmo tempo com a mesma potência. Em frotas corporativas, o comportamento pode ser diferente, com janelas curtas de disponibilidade e maior coincidência de cargas. Por isso, simultaneidade deve ser tratada com critério técnico, e não por suposições genéricas.</p>\n <p>A combinação entre perfil de uso, curva de carga da instalação e eventuais limites operacionais definirá se o projeto exigirá DLM, reforço de entrada ou expansão da infraestrutura.</p>",
     "highlights": [
@@ -503,6 +528,10 @@ window.COURSE_LESSONS = [
       [
         "NDU 042 Energisa",
         "https://www.energisa.com.br/sites/energisa/files/media/documents/2025-11/NDU%20042%20-%20FORNECIMENTO%20DE%20ENERGIA%20EL%C3%89TRICA%20PARA%20SISTEMAS%20DE%20ALIMENTA%C3%87%C3%83O%20DE%20VE%C3%8DCULOS%20EL%C3%89TRICOS_0.pdf"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
@@ -556,7 +585,23 @@ window.COURSE_LESSONS = [
           "Dados irrelevantes"
         ]
       ]
-    ]
+    ],
+    "technicalSections": [
+      {
+        "title": "Planejamento de expansão — hoje, 2 anos e 5 anos",
+        "html": "<p>O e-book sugere consultar os condôminos sobre intenção de adquirir veículo elétrico ou híbrido plug-in nos próximos cinco anos. Para o curso, isso será convertido em uma ferramenta de engenharia de expansão: <b>cenário atual, cenário intermediário e cenário futuro</b>.</p><p>Exemplo: 6 SAVE instalados hoje, infraestrutura comum preparada para 20 e projeto físico previsto para 30 vagas. O dimensionamento deve separar claramente <b>potência instalada futura</b>, <b>potência simultânea gerenciada</b> e <b>capacidade da infraestrutura comum</b>.</p>"
+      },
+      {
+        "title": "Arquitetura escalável",
+        "html": "<p>O aluno deverá estudar se é mais econômico ampliar imediatamente transformador/alimentadores ou implantar uma arquitetura modular com QD-SAVE, circuitos preparados, espaço físico reservado e DLM. A decisão deve ser justificada por curva de carga, demanda, custo e expectativa de crescimento.</p>"
+      }
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — projeção de quantidade de estações",
+      "html": "O material WEMOB recomenda estimar o número de estações atuais e futuras antes de contratar a solução. No curso, essa etapa vira projeção de expansão e análise de cenários.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 8.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    }
   },
   {
     "id": 7,
@@ -684,6 +729,10 @@ window.COURSE_LESSONS = [
       [
         "ABNT Catálogo",
         "https://www.abntcatalogo.com.br/"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
@@ -737,7 +786,23 @@ window.COURSE_LESSONS = [
           "Desnecessária"
         ]
       ]
-    ]
+    ],
+    "technicalSections": [
+      {
+        "title": "Campanha de medição com analisador de energia",
+        "html": "<p>Uma campanha profissional deve registrar o período de coleta, intervalo de amostragem, localização do instrumento, grandezas medidas e eventos extraordinários. Para condomínios, uma semana pode ser um bom ponto de partida quando representa dias úteis e fim de semana, mas o responsável técnico deve avaliar se o período é suficiente para o comportamento real da instalação.</p><p><b>Dados mínimos recomendados para o exercício:</b> data/hora, kW, kVA, kvar, FP, tensão por fase, corrente por fase e energia acumulada.</p>"
+      },
+      {
+        "title": "Da medição ao SAVE Engenharia",
+        "html": "<p>O fluxo didático passa a ser: <b>medir → importar CSV → validar dados → gerar curva → identificar pico → calcular margem → simular SAVE/DLM → documentar premissas</b>. Assim o aluno aprende a transformar dados brutos em decisão de projeto.</p>"
+      }
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — medição por uma semana",
+      "html": "O e-book apresenta medição com analisadores durante uma semana como etapa de diagnóstico do condomínio. A formação preserva a ideia, mas ensina o aluno a justificar tecnicamente o período de medição.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 9 e 30.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    }
   },
   {
     "id": 9,
@@ -843,7 +908,8 @@ window.COURSE_LESSONS = [
       "DLM protege a instalação e aumenta a escalabilidade.",
       "Prioridade de carga pode seguir regras operacionais.",
       "Lógica do DLM deve aparecer no projeto.",
-      "DLM não substitui cálculo; ele altera o cenário calculado."
+      "DLM não substitui cálculo; ele altera o cenário calculado.",
+      "Gerenciamento proporcional é diferente de simples liga/desliga de carregadores."
     ],
     "formula": "P_SAVE,max(t) = P_limite − P_base(t)",
     "example": "Se o limite do sistema é 180 kW e a carga base no instante é 130 kW, o DLM pode liberar até 50 kW para o conjunto de carregadores.",
@@ -862,6 +928,10 @@ window.COURSE_LESSONS = [
       [
         "Schneider EVlink Home Smart - antidisparo/gestão de carga",
         "https://productinfo.se.com/wiser_home/evlink-home-smart_device-user-guide_wiser_home/Portuguese/EVlink%20Home%20Smart_Wiser%20Home_Device%20user%20guide_pt_DD00573198.xml/%24/WHM_EVlinkHomeSmartCPT_pt_DD00573213"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
@@ -921,8 +991,26 @@ window.COURSE_LESSONS = [
       {
         "title": "Critérios técnicos para o DLM",
         "html": "<p>O limite do DLM deve ser compatível com a capacidade da entrada, do transformador, dos alimentadores e com a curva base da instalação. A lógica de controle precisa registrar:</p><ul><li>limite global em kW ou A;</li><li>quantidade máxima de sessões simultâneas;</li><li>corrente mínima por veículo quando aplicável;</li><li>prioridades e janelas de recarga;</li><li>comportamento em falha de comunicação;</li><li>medição usada pelo algoritmo.</li></ul>"
+      },
+      {
+        "title": "Demanda unitária e controlador de potência",
+        "html": "<p>O estudo de caso WEMOB relaciona a NBR 17019 ao fator de demanda unitário dos pontos de conexão quando não há controle de potência, e mostra o uso de controlador para ajustar a potência fornecida aos veículos. No curso, o aluno deve compreender o princípio: <b>sem estratégia de controle tecnicamente válida, o projeto não deve criar uma diversidade arbitrária</b>.</p><p>Quando existe gerenciamento de potência efetivo e documentado, o projeto pode trabalhar com um limite operacional do conjunto, desde que a arquitetura, as proteções e os critérios aplicáveis sejam atendidos.</p>"
+      },
+      {
+        "title": "Controle proporcional × controle liga/desliga",
+        "html": "<p>Em uma solução de gestão madura, a potência é distribuída de forma contínua ou escalonada conforme capacidade disponível, prioridades e limites do sistema. Simplesmente interromper a alimentação elétrica como estratégia primária de controle pode prejudicar a experiência de uso e não representa a lógica de um DLM profissional.</p>"
+      },
+      {
+        "title": "Telemetria que o DLM deve disponibilizar",
+        "html": "<div class=\"mini-checklist\"><span>Potência total disponível</span><span>Potência por conector</span><span>Veículos conectados</span><span>Energia por sessão</span><span>Alarmes e indisponibilidade</span><span>Limite contratado/operacional</span><span>Histórico e relatórios</span><span>Estado de comunicação</span></div>"
       }
-    ]
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — WEMOB Smart Charging System",
+      "html": "O e-book mostra o Smart Charging como forma de distribuir potência em tempo real, reduzir sobrecargas e acompanhar a operação por gráficos e relatórios. No curso, a solução WEMOB é apresentada como um exemplo de arquitetura DLM, não como solução obrigatória.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 24 e 25.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    }
   },
   {
     "id": 11,
@@ -1521,14 +1609,16 @@ window.COURSE_LESSONS = [
   {
     "id": 17,
     "num": "17",
-    "title": "Projeto, Checklist e NDU 042 Energisa",
-    "description": "Documentação, pré-validação e pontos de atenção para protocolo.",
+    "title": "Projeto, Responsabilidade Técnica, NDU 042 e Segurança da Garagem",
+    "description": "Documentação, ART/TRT, pré-validação Energisa, requisitos locais de segurança, emergência e interface com Corpo de Bombeiros.",
     "image": "multiplos-carregadores.webp",
     "objectives": [
       "Conhecer a função da NDU 042 na área Energisa.",
       "Organizar documentação do projeto.",
       "Distinguir pré-validação interna de aprovação formal da concessionária.",
-      "Montar checklist técnico antes do protocolo."
+      "Montar checklist técnico antes do protocolo.",
+      "Distinguir responsabilidade técnica, qualificação NR-10 e atribuição profissional.",
+      "Organizar uma análise de segurança da garagem sem transformar recomendações locais em regra nacional."
     ],
     "theory": "<p>A documentação é parte inseparável do projeto. Para a área da Energisa, a <b>NDU 042</b> estabelece diretrizes e critérios mínimos para fornecimento de energia a unidades com Sistemas de Alimentação de Veículos Elétricos. O documento revisto na versão 2.0 consolida referências nacionais e internacionais e precisa ser sempre verificado em sua versão vigente antes do protocolo.</p>\n <p>É importante adotar a expressão <b>pré-validação</b> na plataforma e no curso. A ferramenta pode apoiar o profissional a conferir checklist, diagramas, memorial e dados do equipamento, mas a aprovação formal continua pertencendo à distribuidora. Isso protege o curso e reforça a responsabilidade técnica do projetista.</p>\n <p>Um pacote técnico maduro costuma incluir: identificação do empreendimento, levantamento, memória de cálculo, curva de carga, diagrama unifilar, especificação dos equipamentos, ART/TRT quando aplicável e checklist final de conformidade.</p><p>A NDU 042 também referencia outras normas da própria Energisa, como NDU-001, NDU-002, NDU-003 e NDU-034 conforme o tipo de fornecimento e a situação do empreendimento. Portanto, o checklist deve identificar se o caso é baixa tensão individual, agrupamento/múltiplas unidades ou atendimento em média tensão.</p>",
     "highlights": [
@@ -1556,6 +1646,10 @@ window.COURSE_LESSONS = [
       [
         "NDU 042 v2.0 — Energisa",
         "https://www.energisa.com.br/sites/energisa/files/media/documents/2025-11/NDU%20042%20-%20FORNECIMENTO%20DE%20ENERGIA%20EL%C3%89TRICA%20PARA%20SISTEMAS%20DE%20ALIMENTA%C3%87%C3%83O%20DE%20VE%C3%8DCULOS%20EL%C3%89TRICOS_0.pdf"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
@@ -1615,20 +1709,41 @@ window.COURSE_LESSONS = [
       {
         "title": "Pré-validação antes do protocolo",
         "html": "<div class=\"check-matrix\"><div>☐ Dados da unidade consumidora e responsável técnico</div><div>☐ Potência dos SAVE e fichas técnicas</div><div>☐ Curva/demanda e estratégia de operação</div><div>☐ Diagrama unifilar</div><div>☐ Cabos, proteções, DR/RDC-DD e DPS</div><div>☐ Aterramento/equipotencialização</div><div>☐ Transformador/entrada quando aplicável</div><div>☐ ART/TRT e documentos exigidos</div><div>☐ Versão vigente da NDU 042 e normas correlatas</div></div>"
+      },
+      {
+        "title": "Responsabilidade técnica: ART, TRT e atribuições",
+        "html": "<p>O responsável pelo projeto e/ou serviço deve estar <b>legalmente habilitado e atuar dentro de suas atribuições profissionais</b>. O documento de responsabilidade técnica aplicável pode ser ART ou TRT, conforme o sistema profissional e o serviço executado. Um curso de NR-10 trata de segurança em serviços com eletricidade e <b>não substitui atribuição profissional nem responsabilidade técnica</b>.</p><p>Antes do serviço, o aluno deve verificar: registro profissional, atribuições, documento de responsabilidade técnica aplicável, escopo contratado e documentos exigidos pela distribuidora e pelo condomínio.</p>"
+      },
+      {
+        "title": "Segurança da garagem e interface com Corpo de Bombeiros",
+        "html": "<p>O e-book WEMOB apresenta uma lista de temas para avaliação: desligamento de emergência, sinalização, circulação de veículos, rotas de fuga, ventilação, proteção contra colisões, intempéries, áreas de risco, sistemas de alarme/combate a incêndio, documentação e comissionamento.</p><p><b>Atenção:</b> esses itens devem ser usados como <b>checklist de investigação</b>. Exigências concretas de afastamento, sprinklers, posição do carregador, restrições de modos de recarga ou desligamento de emergência dependem da legislação e das instruções técnicas vigentes do Corpo de Bombeiros e demais autoridades locais.</p>"
+      },
+      {
+        "title": "Pacote documental do empreendimento",
+        "html": "<div class=\"mini-checklist\"><span>Memorial descritivo</span><span>Memorial de cálculo</span><span>Diagrama unifilar</span><span>Curva de carga / demanda</span><span>Fichas técnicas dos SAVE</span><span>Estudo de DLM quando aplicável</span><span>Proteções e aterramento</span><span>ART/TRT aplicável</span><span>Checklist de segurança local</span><span>Plano de comissionamento</span></div>"
       }
-    ]
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — normas simplificadas WEMOB",
+      "html": "O e-book reúne tópicos de segurança da garagem, emergência, ventilação, proteção física, incêndio e documentação. Na plataforma, esses itens são convertidos em checklist de verificação local e não em uma norma nacional única.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 21 e 22.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    }
   },
   {
     "id": 18,
     "num": "18",
-    "title": "Estudo de Caso — Condomínio com Vários Carregadores",
-    "description": "Aplicação integrada dos conceitos em um cenário realista.",
+    "title": "Estudo de Caso — Implantação Completa em Condomínio",
+    "description": "Da assembleia ao projeto executivo: expansão, arquitetura individual/coletiva, gestão, rateio e implantação por etapas.",
     "image": "desafio-projeto.png",
     "objectives": [
       "Integrar todas as etapas do curso em um caso aplicado.",
       "Comparar alternativas de especificação.",
       "Defender tecnicamente cada decisão adotada.",
-      "Preparar o aluno para o projeto final."
+      "Preparar o aluno para o projeto final.",
+      "Planejar a implantação institucional e técnica em condomínio.",
+      "Comparar arquitetura individual, compartilhada e híbrida.",
+      "Criar memorial de regras para futuras instalações."
     ],
     "theory": "<p>No estudo de caso, o aluno deixa de ver os temas como assuntos isolados e passa a trabalhar o projeto como sistema. A edificação possui carga existente, curva de carga, transformador, alimentadores, estratégia operacional e uma frota com comportamento definido. Cabe ao projetista transformar esse conjunto em um projeto coerente.</p>\n <p>O cenário proposto — por exemplo, um condomínio com múltiplos carregadores — exige avaliar potência instalada, simultaneidade, DLM, dimensionamento de circuitos, proteção, aterramento e documentação. Essa abordagem desenvolve o raciocínio de engenharia que o mercado espera do profissional.</p>\n <p>O produto final deve ser defensável: cada decisão precisa estar conectada a dados, premissas e normas.</p>",
     "highlights": [
@@ -1651,72 +1766,103 @@ window.COURSE_LESSONS = [
       [
         "NDU 042 Energisa",
         "https://www.energisa.com.br/sites/energisa/files/media/documents/2025-11/NDU%20042%20-%20FORNECIMENTO%20DE%20ENERGIA%20EL%C3%89TRICA%20PARA%20SISTEMAS%20DE%20ALIMENTA%C3%87%C3%83O%20DE%20VE%C3%8DCULOS%20EL%C3%89TRICOS_0.pdf"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
       [
-        "No estudo de caso, os temas do curso aparecem:",
-        "De forma integrada",
+        "Antes de decidir quantos carregadores instalar, o condomínio deve considerar:",
+        "Demanda atual e crescimento futuro",
         [
-          "De forma isolada sem relação",
-          "De forma integrada",
-          "Sem necessidade de cálculo",
-          "Apenas como teoria"
+          "Somente os veículos existentes hoje",
+          "Demanda atual e crescimento futuro",
+          "Apenas o número de vagas visitantes",
+          "Somente o preço do wallbox"
         ]
       ],
       [
-        "Uma decisão de projeto deve ser:",
-        "Justificada por dados, normas e premissas",
+        "Uma arquitetura híbrida pode combinar:",
+        "Pontos individuais e pontos compartilhados",
         [
-          "Tomada ao acaso",
-          "Justificada por dados, normas e premissas",
-          "Baseada só em marketing",
-          "Sem memorial"
+          "Somente carregadores DC",
+          "Pontos individuais e pontos compartilhados",
+          "Apenas tomadas residenciais",
+          "Somente um carregador para todo o condomínio"
         ]
       ],
       [
-        "Comparar cenários com e sem DLM ajuda a:",
-        "Defender tecnicamente a solução",
+        "O memorial de regras do condomínio deve:",
+        "Padronizar requisitos técnicos para futuras instalações",
         [
-          "Apenas aumentar o número de slides",
-          "Defender tecnicamente a solução",
-          "Eliminar a necessidade de curva de carga",
-          "Substituir a vistoria"
+          "Substituir o projeto elétrico",
+          "Padronizar requisitos técnicos para futuras instalações",
+          "Eliminar responsabilidade técnica",
+          "Definir apenas a cor das vagas"
         ]
       ],
       [
-        "O estudo de caso prepara o aluno para:",
-        "Projeto final e atuação profissional",
+        "A comissão condominial pode ajudar principalmente em:",
+        "Governança, necessidades e comunicação",
         [
-          "Apenas responder prova teórica",
-          "Projeto final e atuação profissional",
-          "Mudar a marca do veículo",
-          "Ignorar normas"
+          "Assumir responsabilidade técnica do projeto",
+          "Governança, necessidades e comunicação",
+          "Emitir ART",
+          "Substituir a distribuidora"
         ]
       ],
       [
-        "O memorial do caso aplicado deve registrar:",
-        "Premissas, cálculos e verificações",
+        "Uma implantação por etapas é favorecida por:",
+        "Infraestrutura comum preparada e planejamento de expansão",
         [
-          "Somente fotos bonitas",
-          "Premissas, cálculos e verificações",
-          "Apenas o nome do condomínio",
-          "Só o valor do carregador"
+          "Ausência de projeto",
+          "Infraestrutura comum preparada e planejamento de expansão",
+          "Ligações independentes sem padrão",
+          "Eliminação do DLM"
         ]
       ]
-    ]
+    ],
+    "technicalSections": [
+      {
+        "title": "Fluxo de implantação em condomínio",
+        "html": "<div class=\"process-flow\"><span>1. Levantar interesse atual e futuro</span><span>2. Realizar diagnóstico energético</span><span>3. Definir arquitetura de recarga</span><span>4. Apresentar cenários à assembleia</span><span>5. Aprovar regras e infraestrutura comum</span><span>6. Elaborar projeto executivo</span><span>7. Implantar por etapas</span><span>8. Comissionar e documentar</span></div>"
+      },
+      {
+        "title": "Individual, compartilhada ou híbrida?",
+        "html": "<p>O e-book diferencia uso individual e coletivo conforme permanência dos veículos. No curso, a abordagem será mais ampla:</p><ul><li><b>Individual:</b> um SAVE vinculado à unidade/vaga, com gestão e medição definidas.</li><li><b>Compartilhada:</b> vagas de rotatividade, autenticação e rateio por sessão.</li><li><b>Híbrida:</b> pontos individuais mais um conjunto compartilhado.</li><li><b>Infraestrutura comum + DLM:</b> expansão gradual com limite central de potência.</li></ul><p>A escolha deve considerar perfil de uso, governança, custos, medição, disponibilidade elétrica e expansão.</p>"
+      },
+      {
+        "title": "Memorial de regras do condomínio",
+        "html": "<p>O memorial deve definir requisitos mínimos para novas instalações: potência máxima por ponto, padrões de comunicação aceitos, critérios de DLM, proteção, cabos/rotas, medição, acesso, identificação, documentação do responsável técnico e procedimento de aprovação interna. Isso evita instalações isoladas e incompatíveis entre si.</p>"
+      },
+      {
+        "title": "Comissão técnica e comunicação com os moradores",
+        "html": "<p>O e-book sugere a formação de uma comissão para amadurecer os temas técnicos. A plataforma aproveita essa ideia como ferramenta de governança: decisões técnicas permanecem sob responsabilidade dos profissionais habilitados, enquanto a comissão ajuda a organizar necessidades, regras de uso e comunicação com os moradores.</p>"
+      }
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — da assembleia à implantação",
+      "html": "O guia WEMOB estrutura a implantação a partir da estimativa de estações, visita técnica, escolha entre uso individual/coletivo, apresentação em assembleia, memorial e comissão. A plataforma converte esse roteiro em processo neutro de implantação.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 8 a 13.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    },
+    "simulatorType": "condo"
   },
   {
     "id": 19,
     "num": "19",
-    "title": "Leitura de Ficha Técnica e Especificação de Equipamentos",
-    "description": "Como interpretar fichas técnicas e transformar dados de fabricante em decisão de projeto.",
+    "title": "Ficha Técnica, OCPP, RFID e Gestão de Estações",
+    "description": "Leitura de equipamentos reais, conectividade, autenticação, rateio e estudo de caso WEG WEMOB.",
     "image": "ficha-tecnica-carregador.webp",
     "objectives": [
       "Interpretar fichas técnicas de fabricantes.",
       "Transformar dados de catálogo em critérios de especificação.",
       "Reconhecer erros comuns na leitura de dados.",
-      "Relacionar ficha técnica a conector, proteção, ambiente e conectividade."
+      "Relacionar ficha técnica a conector, proteção, ambiente e conectividade.",
+      "Entender o papel de OCPP, RFID, aplicativos e sistemas de gestão.",
+      "Analisar um produto de fabricante sem transformar marketing em requisito universal."
     ],
     "theory": "<p>A ficha técnica é um dos documentos mais importantes do projeto. Nela o profissional encontra informações como potência nominal, tensão de alimentação, corrente máxima, modo de recarga, tipo de conector, grau de proteção IP, resistência mecânica IK, conectividade, medição de energia e eventuais requisitos de proteção.</p>\n <p>O erro comum é escolher o equipamento apenas pela potência. A boa leitura da ficha técnica conecta os dados do fabricante às condições reais de projeto: compatibilidade com o veículo, compatibilidade com a instalação, necessidade de software de gestão, exigência ambiental e requisitos de medição.</p>\n <p>Ao dominar esse processo, o aluno deixa de ser mero operador de catálogo e passa a atuar como especificador técnico.</p>",
     "highlights": [
@@ -1747,60 +1893,88 @@ window.COURSE_LESSONS = [
       [
         "WEG WEMOB Wall",
         "https://static.weg.net/medias/downloadcenter/h78/h95/WEG_WEMOB_50158988_EN.pdf"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
       [
-        "Qual informação a ficha técnica normalmente apresenta?",
-        "Potência, tensão, corrente e conector",
+        "O OCPP é usado principalmente para:",
+        "Comunicação entre estação e sistema central de gestão",
         [
-          "Somente o preço",
-          "Potência, tensão, corrente e conector",
-          "Apenas a logomarca",
-          "Somente o peso do veículo"
+          "Substituir o disjuntor",
+          "Comunicação entre estação e sistema central de gestão",
+          "Definir a resistência de aterramento",
+          "Medir a pressão dos pneus"
         ]
       ],
       [
-        "Escolher um carregador apenas pela potência é um erro porque:",
-        "Outros critérios técnicos também influenciam a adequação",
+        "RFID em uma estação pode ser usado para:",
+        "Autenticação e controle de acesso",
         [
-          "Potência nunca importa",
-          "Outros critérios técnicos também influenciam a adequação",
-          "Conector não existe",
-          "IP e IK não têm função"
+          "Aumentar a tensão",
+          "Autenticação e controle de acesso",
+          "Substituir o PE",
+          "Corrigir fator de potência"
         ]
       ],
       [
-        "O grau IP informa:",
-        "Proteção contra poeira e água",
+        "Dados de potência de um produto em um e-book de fabricante devem ser tratados como:",
+        "Especificações daquele produto/edição, a confirmar na ficha vigente",
         [
-          "Nível de bateria do carro",
-          "Proteção contra poeira e água",
-          "Tipo de software",
-          "Fator de potência"
+          "Regra universal para todos os carregadores",
+          "Especificações daquele produto/edição, a confirmar na ficha vigente",
+          "Norma ABNT",
+          "Valor fixo para qualquer mercado"
         ]
       ],
       [
-        "Recursos como OCPP, Wi-Fi, Ethernet e RFID estão ligados a:",
-        "Conectividade e gestão",
+        "Rateio de consumo em condomínio exige principalmente:",
+        "Medição e identificação confiável das sessões",
         [
-          "Aterramento apenas",
-          "Conectividade e gestão",
-          "Tipo de pintura",
-          "Somente aterramento"
+          "Apenas uma tomada comum",
+          "Medição e identificação confiável das sessões",
+          "Somente um botão liga/desliga",
+          "Apenas o nome do morador"
         ]
       ],
       [
-        "A leitura da ficha técnica conecta os dados do fabricante a:",
-        "Decisões reais de projeto",
+        "Uma recomendação comercial “use somente OCPP 1.6J” deve ser convertida no curso em:",
+        "Critério de arquitetura a avaliar conforme aplicação e requisitos",
         [
-          "Somente propaganda comercial",
-          "Decisões reais de projeto",
-          "Apenas decoração do estacionamento",
-          "Somente certificado do curso"
+          "Obrigação normativa universal",
+          "Critério de arquitetura a avaliar conforme aplicação e requisitos",
+          "Proibição de outras versões",
+          "Dispensa de software"
         ]
       ]
-    ]
+    ],
+    "technicalSections": [
+      {
+        "title": "Gestão, autenticação e rateio",
+        "html": "<p>Em condomínios com vários usuários, o sistema pode precisar identificar quem iniciou a sessão, registrar energia consumida e gerar dados para rateio. RFID, aplicativo e outras formas de autenticação são recursos comuns. O aluno deve separar <b>medição técnica</b>, <b>rateio condominial</b> e eventual <b>faturamento comercial</b>, pois cada contexto pode ter requisitos próprios.</p>"
+      },
+      {
+        "title": "OCPP como arquitetura de integração",
+        "html": "<p>O e-book recomenda OCPP 1.6J em sua solução. No curso, OCPP será ensinado como protocolo de comunicação entre estação e sistema central de gestão (CSMS), sem tornar uma versão específica obrigatória para todos os projetos.</p><div class=\"arch-flow\"><span>Veículo</span><b>→</b><span>SAVE</span><b>→</b><span>OCPP / rede</span><b>→</b><span>CSMS</span><b>→</b><span>Usuário / gestão / relatórios</span></div>"
+      },
+      {
+        "title": "Snapshot técnico — WEMOB WALL (documento 2026)",
+        "html": "<p>O e-book apresenta a WEMOB WALL com versões de até <b>7,68 kW Type 2</b> ou <b>12 kW Type 1</b>, alimentação de 100 a 240 Vca, cabo de 5 m (7 m sob consulta), uso ao tempo e montagem em parede ou pedestal, além de conectividade ao sistema de gestão do fabricante. Esses valores devem ser lidos como <b>dados da edição/modelos apresentados no documento de 2026</b>, não como especificação de toda a família em qualquer mercado.</p>"
+      },
+      {
+        "title": "Snapshot técnico — WEMOB PARKING (documento 2026)",
+        "html": "<p>O material apresenta versões com Type 2, potência de até <b>23 kW</b>, alimentação de 198 a 415 Vca, opções mono/bi/trifásicas e conectividade Wi‑Fi com Ethernet/4G em determinadas configurações. Há também versão com dois conectores para recarga simultânea. O exercício do aluno será conferir cada item na ficha técnica vigente antes de especificar.</p>"
+      }
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — produtos e plataforma WEMOB",
+      "html": "A documentação mostra WALL e PARKING, gestão Station Fleet Management, aplicativo EV Drivers, autenticação por tag/RFID, monitoramento de consumo e recomendação de OCPP 1.6J. No curso, esses itens são analisados como exemplo de ecossistema conectado.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 15, 16 e 27 a 33.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    }
   },
   {
     "id": 20,
@@ -1812,7 +1986,9 @@ window.COURSE_LESSONS = [
       "Concluir o projeto final da formação.",
       "Aplicar checklist de comissionamento.",
       "Organizar a entrega profissional ao cliente.",
-      "Compreender o desbloqueio do SAVE Engenharia como benefício de conclusão."
+      "Compreender o desbloqueio do SAVE Engenharia como benefício de conclusão.",
+      "Validar itens de segurança física, comunicação e gestão antes da entrega.",
+      "Organizar o dossiê final do condomínio."
     ],
     "theory": "<p>A etapa final consolida a jornada do aluno. O projeto deve reunir identificação do empreendimento, levantamento, memória de cálculo, curva de carga, cenários de demanda, DLM quando aplicável, dimensionamento dos circuitos, proteções, diagrama unifilar, lista de materiais e checklist de comissionamento.</p>\n <p>O comissionamento é a ponte entre o projeto e a realidade da obra. O profissional precisa verificar montagem, continuidade do PE, identificação dos circuitos, parametrização dos equipamentos, conferência dos dispositivos de proteção e testes funcionais compatíveis com o escopo da instalação.</p>\n <p>Com a conclusão das microaulas e do projeto final, o aluno libera o acesso ao SAVE Engenharia como ferramenta profissional de apoio, mantendo a filosofia do curso: fundamento primeiro, software depois.</p>",
     "highlights": [
@@ -1839,6 +2015,10 @@ window.COURSE_LESSONS = [
       [
         "ABNT Catálogo",
         "https://www.abntcatalogo.com.br/"
+      ],
+      [
+        "WEG WEMOB 2026 — e-book de condomínios",
+        "source:ebook-wemob-2026"
       ]
     ],
     "quiz": [
@@ -1892,6 +2072,26 @@ window.COURSE_LESSONS = [
           "Substitui o memorial"
         ]
       ]
-    ]
+    ],
+    "technicalSections": [
+      {
+        "title": "Comissionamento técnico e operacional",
+        "html": "<p>Além das verificações elétricas, uma infraestrutura conectada deve ter seu fluxo operacional testado: autenticação, início e término de sessão, comunicação com plataforma, registro de energia, alarmes, limites do DLM e recuperação após falha de comunicação ou energia.</p>"
+      },
+      {
+        "title": "Checklist final da garagem",
+        "html": "<div class=\"mini-checklist\"><span>Identificação dos circuitos</span><span>Integridade mecânica</span><span>Proteção contra colisão</span><span>Acessibilidade dos comandos</span><span>Sinalização</span><span>PE e equipotencialização</span><span>Proteções elétricas</span><span>Parâmetros do SAVE</span><span>DLM</span><span>Comunicação / CSMS</span><span>Rateio/medição</span><span>Documentos e registros</span></div>"
+      },
+      {
+        "title": "Dossiê de entrega",
+        "html": "<p>A entrega final deve reunir projeto “como construído” quando aplicável, memorial atualizado, diagramas, fichas técnicas, documentos de responsabilidade técnica, resultados de testes, parâmetros principais, cadastro dos equipamentos, procedimento de emergência e orientações de operação/manutenção.</p>"
+      }
+    ],
+    "manufacturerCase": {
+      "title": "Estudo de caso — documentação e comissionamento",
+      "html": "O e-book inclui projeto técnico, documentação e comissionamento entre os pilares de segurança. A formação amplia o conceito para testes elétricos, operacionais, DLM e gestão conectada.",
+      "source": "WEG WEMOB — e-book “Solução para recarga de veículos elétricos em condomínio” (2026), páginas 21 e 22.",
+      "note": "Conteúdo tratado como estudo de caso de fabricante. Critérios normativos e requisitos locais devem ser verificados na versão vigente."
+    }
   }
 ];
