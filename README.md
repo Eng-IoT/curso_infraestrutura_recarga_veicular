@@ -1,46 +1,39 @@
-# Formação Profissional — Projetos de Infraestrutura de Recarga Veicular V5
+# Formação Profissional — Projetos de Infraestrutura de Recarga Veicular — V6
 
-## V5 — Certificação digital e conclusão profissional
+## Certificado institucional
+A V6 substitui o certificado anterior pelo padrão institucional de duas páginas baseado no modelo de certificado fornecido pelo autor.
 
-Esta versão mantém todo o conteúdo técnico da V4 e acrescenta o fluxo de conclusão do aluno:
+### Página 1
+- logomarca Joelson Mendes;
+- certificado nº / código único;
+- campo TRT/ART configurável;
+- título do curso;
+- nome do aluno;
+- CPF quando informado e autorizado;
+- 80 horas, modalidade, período e local;
+- resultado APROVADO(A);
+- referências técnicas;
+- assinatura do instrutor, aluno e responsável técnico;
+- código de autenticidade.
 
-- cadastro do aluno antes/início da formação;
-- dados salvos localmente no dispositivo;
-- exigência de 20/20 microaulas concluídas;
-- exigência do Projeto Final confirmado;
-- tela de conferência dos dados antes da emissão;
-- código único local de certificado;
-- QR de consulta;
-- certificado em A4 horizontal;
-- segunda página com histórico completo das 20 microaulas;
-- impressão/Salvar como PDF pelo navegador;
-- desbloqueio do SAVE Engenharia somente após emissão do certificado;
-- estrutura preparada para validação pública com Supabase.
+### Página 2 — anexo
+- 20 microaulas / conteúdo programático;
+- carga horária total 80 h;
+- período, local e modalidade;
+- instrutor e responsabilidade técnica;
+- QR e código de autenticidade.
 
-## Fluxo do aluno
+## Configuração antes de uma turma real
+No início de `app.js`, edite `CERT_CONFIG`, especialmente:
+- `modality`;
+- `location`;
+- `responsible`;
+- `responsibleRole`;
+- `artTrt`.
 
-Cadastro → 20 microaulas → 100 questões → Projeto Final → Conferência de dados → Certificado + Histórico → SAVE Engenharia.
-
-## Importante sobre o QR da V5 local
-
-A versão local gera um QR de consulta contendo os dados do certificado. Isso é suficiente para demonstração e testes, mas **não é uma validação antifraude pública**. Para produção, use o backend Supabase incluído em `supabase/schema.sql` e emita certificados por uma Edge Function/servidor.
+Não emita certificados reais com ART/TRT fictícia.
 
 ## Executar localmente
+`python -m http.server 8080`
 
-```bash
-python -m http.server 8080
-```
-
-Depois acesse:
-
-`http://localhost:8080`
-
-## Publicar na Vercel
-
-A pasta pode ser publicada como site estático. Para certificação pública real, configure também o backend de emissão/validação.
-
-## SAVE Engenharia
-
-O acesso continua apontando para:
-
-https://saevengenharia.vercel.app/
+Depois acesse `http://localhost:8080`.

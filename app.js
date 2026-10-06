@@ -1,13 +1,26 @@
 
 const lessons=window.COURSE_LESSONS;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const STORAGE='curso-recarga-veicular-v5';
-const LEGACY_STORAGE='curso-recarga-veicular-v4';
-const DEFAULT_STATE={completed:[],quiz:{},projectChecks:{},projectSubmitted:false,lastLesson:1,student:{name:'',email:'',city:'',uf:'',phone:'',cpf:'',consent:false},certificate:null};
+const STORAGE='curso-recarga-veicular-v6';
+const LEGACY_STORAGE='curso-recarga-veicular-v5';
+const DEFAULT_STATE={completed:[],quiz:{},projectChecks:{},projectSubmitted:false,lastLesson:1,courseStartedAt:null,student:{name:'',email:'',city:'',uf:'',phone:'',cpf:'',consent:false},certificate:null};
 let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||JSON.parse(localStorage.getItem(LEGACY_STORAGE)||'null')||structuredClone(DEFAULT_STATE);
 state.student=state.student||{name:state.studentName||'',email:'',city:'',uf:'',phone:'',cpf:'',consent:false};
 state.certificate=state.certificate||null;
 let currentLesson=null;
+const CERT_CONFIG={
+  course:'Projetos de Infraestrutura de Recarga Veicular',
+  workload:'80 horas',
+  modality:'On-line / Autoinstrucional',
+  location:'Rio Branco/AC',
+  instructor:'Joelson M. Mendes',
+  instructorRole:'Especialista em Energia, IoT e Indústria 4.0',
+  responsible:'Joelson M. Mendes',
+  responsibleRole:'Responsável técnico da formação',
+  artTrt:'',
+  organization:'Joelson Mendes — Treinamentos e Serviços Técnicos'
+};
+
 
 function save(){localStorage.setItem(STORAGE,JSON.stringify(state));refreshGlobal()}
 function progress(){return state.completed.length}
@@ -20,7 +33,7 @@ function switchView(name){
   $$('.view').forEach(v=>v.classList.remove('active'));
   $(`#view-${name}`).classList.add('active');
   $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
-  const titles={home:['Formação Profissional','Projetos de Infraestrutura de Recarga Veicular • V5'],course:['Microaulas','20 microaulas • 80 horas • conteúdo ampliado'],project:['Projeto Final','Projeto integrador da formação'],profile:['Meus dados','Cadastro para certificado e histórico'],certificate:['Certificado','Emissão após conclusão integral'],reward:['SAVE Engenharia','Benefício profissional de conclusão']};
+  const titles={home:['Formação Profissional','Projetos de Infraestrutura de Recarga Veicular • V6'],course:['Microaulas','20 microaulas • 80 horas • conteúdo ampliado'],project:['Projeto Final','Projeto integrador da formação'],profile:['Meus dados','Cadastro para certificado e histórico'],certificate:['Certificado','Emissão após conclusão integral'],reward:['SAVE Engenharia','Benefício profissional de conclusão']};
   if(titles[name]){$('#pageTitle').textContent=titles[name][0];$('#pageSubtitle').textContent=titles[name][1]}
   $('#stickyLessonNav').classList.add('hidden'); currentLesson=null;
   if(innerWidth<900)$('#sidebar').classList.remove('open');
@@ -130,6 +143,7 @@ function runSimulator(type){
 }
 
 function openLesson(id){
+  if(!state.courseStartedAt){state.courseStartedAt=new Date().toISOString(); save();}
   currentLesson=id; state.lastLesson=id; save();
   const l=lessons[id-1], done=state.completed.includes(id);
   $('#pageTitle').textContent=`Microaula ${l.num}`; $('#pageSubtitle').textContent=l.title;
@@ -255,10 +269,31 @@ function issueCertificate(){
   } else {state.certificate.issued=true; state.certificate.validationUrl=state.certificate.validationUrl||makeValidationUrl(state.certificate)}
   save(); renderCertificate(); renderReward(); toast('Certificado emitido. SAVE Engenharia liberado.');
 }
+function periodText(){
+  const start=state.courseStartedAt?new Date(state.courseStartedAt):new Date(state.certificate?.issuedAt||Date.now());
+  const end=state.certificate?.date||formatDateISO();
+  const s=start.toISOString().slice(0,10);
+  return `${formatDateBR(s)} a ${formatDateBR(end)}`;
+}
 function renderHistory(){
   if(!certificateIssued())return;
-  $('#historyName').textContent=state.student.name; $('#historyCode').textContent=state.certificate.code; $('#historyDate').textContent=formatDateBR(state.certificate.date);
-  $('#historyBody').innerHTML=lessons.map(l=>`<tr><td>${l.num}</td><td>${l.title}</td><td>4 h</td><td>Concluída ✓</td></tr>`).join('');
+  const c=state.certificate,s=state.student;
+  $('#historyName').textContent=s.name;
+  $('#historyCode').textContent=c.code;
+  $('#historyDate').textContent=formatDateBR(c.date);
+  $('#annexCode').textContent=c.code;
+  $('#annexPeriod').textContent=periodText();
+  $('#annexLocation').textContent=CERT_CONFIG.location;
+  $('#annexMode').textContent=CERT_CONFIG.modality;
+  $('#annexInstructor').textContent=CERT_CONFIG.instructor;
+  $('#annexInstructorRole').textContent=CERT_CONFIG.instructorRole;
+  $('#annexResponsible').textContent=CERT_CONFIG.responsible;
+  $('#annexResponsibleRole').textContent=CERT_CONFIG.responsibleRole;
+  $('#annexArtTrt').textContent=`TRT/ART: ${CERT_CONFIG.artTrt||'—'}`;
+  $('#annexOrganization').textContent=CERT_CONFIG.organization;
+  const left=lessons.slice(0,10),right=lessons.slice(10);
+  const renderCol=list=>`<ol start="${list[0].id}">${list.map(l=>`<li><b>${l.title}</b><span>${l.description}</span></li>`).join('')}</ol>`;
+  $('#programBody').innerHTML=renderCol(left)+renderCol(right);
 }
 function renderCertificate(){
   const ok=courseComplete(),issued=certificateIssued();
@@ -269,13 +304,29 @@ function renderCertificate(){
   $('#certUnlockBar').style.width=`${Math.round(progress()/20*100)}%`;
   if(ok&&!issued){
     const s=state.student||{};
-    $('#confirmStudentData').innerHTML=`<h3>Dados que serão impressos</h3><div class="confirm-lines"><span><small>Nome</small><b>${s.name||'Não informado'}</b></span><span><small>E-mail</small><b>${s.email||'Não informado'}</b></span><span><small>Localidade</small><b>${s.city||'—'} - ${s.uf||'—'}</b></span></div><button class="btn outline" data-edit-profile>Corrigir dados</button>`;
+    $('#confirmStudentData').innerHTML=`<h3>Dados que serão impressos</h3><div class="confirm-lines"><span><small>Nome</small><b>${s.name||'Não informado'}</b></span><span><small>CPF</small><b>${s.cpf||'Não informado — não será impresso'}</b></span><span><small>E-mail</small><b>${s.email||'Não informado'}</b></span><span><small>Localidade</small><b>${s.city||'—'} - ${s.uf||'—'}</b></span><span><small>Modalidade</small><b>${CERT_CONFIG.modality}</b></span></div><button class="btn outline" data-edit-profile>Corrigir dados</button>`;
     const e=$('[data-edit-profile]'); if(e)e.onclick=()=>switchView('profile');
   }
   if(issued){
     const c=state.certificate,s=state.student;
-    $('#certName').textContent=s.name; $('#certDateText').textContent=`${s.city} - ${s.uf}, ${longDateBR(c.date)}.`;
-    $('#certCode').textContent=c.code; $('#toolbarCertCode').textContent=c.code; $('#certHashShort').textContent=`Registro ${c.hash.slice(0,10).toUpperCase()}`;
+    $('#certName').textContent=s.name.toUpperCase();
+    $('#certCPF').textContent=s.cpf?`CPF: ${s.cpf}`:'';
+    $('#certMode').textContent=CERT_CONFIG.modality;
+    $('#certPeriod').textContent=periodText();
+    $('#certLocation').textContent=CERT_CONFIG.location;
+    $('#certNumber').textContent=c.code;
+    $('#toolbarCertCode').textContent=c.code;
+    $('#certArtTrtTop').textContent=`TRT/ART: ${CERT_CONFIG.artTrt||'—'}`;
+    $('#certInstructor').textContent=CERT_CONFIG.instructor;
+    $('#certInstructorRole').textContent=CERT_CONFIG.instructorRole;
+    $('#certStudentSign').textContent=s.name;
+    $('#certResponsible').textContent=CERT_CONFIG.responsible;
+    $('#certResponsibleRole').textContent=CERT_CONFIG.responsibleRole;
+    $('#certArtTrtSign').textContent=`TRT/ART: ${CERT_CONFIG.artTrt||'—'}`;
+    $('#certIssueFoot').textContent=`Emitido em ${longDateBR(c.date)}, ${CERT_CONFIG.location}`;
+    $('#certOrganization').textContent=CERT_CONFIG.organization;
+    $('#certAuthFoot').textContent=`Código: ${c.code}`;
+    $('#certHashShort').textContent=`Registro ${c.hash.slice(0,10).toUpperCase()}`;
     const qr=`https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&data=${encodeURIComponent(c.validationUrl)}`; $('#certQr').src=qr;
     renderHistory();
   }
