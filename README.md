@@ -1,33 +1,46 @@
-# Formação Profissional — Projetos de Infraestrutura de Recarga Veicular V4
+# Formação Profissional — Projetos de Infraestrutura de Recarga Veicular V5
 
-## Atualização V4 — Condomínios, gestão e implantação real
+## V5 — Certificação digital e conclusão profissional
 
-Esta versão incorpora, como **estudo de caso de fabricante**, os principais aprendizados do e-book WEG WEMOB 2026 sobre implantação de recarga em condomínios. O conteúdo foi neutralizado para ensino profissional e separado de alegações comerciais específicas da marca.
+Esta versão mantém todo o conteúdo técnico da V4 e acrescenta o fluxo de conclusão do aluno:
 
-### Novos conteúdos integrados
-- diagnóstico energético antes da proposta;
-- campanha de medição com analisador de energia;
-- planejamento de expansão atual / 2 anos / 5 anos;
-- implantação por etapas;
-- arquitetura individual, compartilhada e híbrida;
-- memorial de regras do condomínio;
-- governança e comissão de implantação;
-- DLM / Smart Charging e diferença para simples liga-desliga;
-- segurança da garagem e interface com Corpo de Bombeiros;
-- responsabilidade técnica: profissional habilitado, ART/TRT e limites da NR-10;
-- OCPP, RFID, autenticação, gestão e rateio;
-- estudo de caso técnico WEMOB WALL e WEMOB PARKING;
-- comissionamento elétrico e operacional;
-- novo simulador de expansão de condomínio.
+- cadastro do aluno antes/início da formação;
+- dados salvos localmente no dispositivo;
+- exigência de 20/20 microaulas concluídas;
+- exigência do Projeto Final confirmado;
+- tela de conferência dos dados antes da emissão;
+- código único local de certificado;
+- QR de consulta;
+- certificado em A4 horizontal;
+- segunda página com histórico completo das 20 microaulas;
+- impressão/Salvar como PDF pelo navegador;
+- desbloqueio do SAVE Engenharia somente após emissão do certificado;
+- estrutura preparada para validação pública com Supabase.
 
-### Base documental usada nesta atualização
-WEG WEMOB — e-book **“Solução para recarga de veículos elétricos em condomínio”**, edição disponibilizada em 2026.
+## Fluxo do aluno
 
-### Princípio editorial
-Recomendações comerciais do fabricante não são tratadas como exigências universais. Valores e características de produtos são apresentados como fotografia dos modelos/edição do documento e devem ser conferidos na ficha técnica vigente antes de qualquer projeto real.
+Cadastro → 20 microaulas → 100 questões → Projeto Final → Conferência de dados → Certificado + Histórico → SAVE Engenharia.
 
-## Execução local
+## Importante sobre o QR da V5 local
+
+A versão local gera um QR de consulta contendo os dados do certificado. Isso é suficiente para demonstração e testes, mas **não é uma validação antifraude pública**. Para produção, use o backend Supabase incluído em `supabase/schema.sql` e emita certificados por uma Edge Function/servidor.
+
+## Executar localmente
+
 ```bash
 python -m http.server 8080
 ```
-Acesse: http://localhost:8080
+
+Depois acesse:
+
+`http://localhost:8080`
+
+## Publicar na Vercel
+
+A pasta pode ser publicada como site estático. Para certificação pública real, configure também o backend de emissão/validação.
+
+## SAVE Engenharia
+
+O acesso continua apontando para:
+
+https://saevengenharia.vercel.app/

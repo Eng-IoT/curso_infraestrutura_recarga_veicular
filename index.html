@@ -24,6 +24,7 @@
       <button class="nav-item active" data-view="home">⌂ <span>Início</span></button>
       <button class="nav-item" data-view="course">▦ <span>Microaulas</span></button>
       <button class="nav-item" data-view="project">⌘ <span>Projeto Final</span></button>
+      <button class="nav-item" data-view="profile">◉ <span>Meus dados</span></button>
       <button class="nav-item" data-view="certificate">▤ <span>Certificado</span></button>
       <button class="nav-item reward" data-view="reward">⚡ <span>SAVE Engenharia</span><em id="rewardLock">🔒</em></button>
     </nav>
@@ -37,7 +38,7 @@
       <button id="menuBtn" class="icon-btn">☰</button>
       <div>
         <h1 id="pageTitle">Formação Profissional</h1>
-        <p id="pageSubtitle">Projetos de Infraestrutura de Recarga Veicular</p>
+        <p id="pageSubtitle">Projetos de Infraestrutura de Recarga Veicular • V5</p>
       </div>
       <button class="btn outline" id="continueBtn">Continuar curso →</button>
     </header>
@@ -45,7 +46,7 @@
     <section id="view-home" class="view active">
       <div class="hero">
         <div class="hero-copy">
-          <span class="kicker">V4 • 80 HORAS • 20 MICROAULAS • PROJETO APLICADO • CONDOMÍNIOS</span>
+          <span class="kicker">V5 • 80 HORAS • 20 MICROAULAS • PROJETO APLICADO • CERTIFICAÇÃO DIGITAL</span>
           <h2>Projetista de <span>Infraestrutura de Recarga Veicular</span></h2>
           <p>Do diagnóstico energético ao projeto executivo: DLM, condomínios, gestão, segurança, fabricantes, normas e comissionamento.</p>
           <div class="hero-actions">
@@ -116,22 +117,86 @@
       </div>
     </section>
 
+    <section id="view-profile" class="view">
+      <div class="project-hero">
+        <span class="kicker">CADASTRO DO ALUNO</span>
+        <h2>Dados para certificado e histórico</h2>
+        <p>Preencha seus dados com atenção. O nome completo será utilizado no certificado de conclusão.</p>
+      </div>
+      <div class="profile-grid">
+        <article class="panel">
+          <form id="studentProfileForm" class="student-form">
+            <label>Nome completo *<input id="profileName" autocomplete="name" required placeholder="Nome completo"></label>
+            <label>E-mail *<input id="profileEmail" type="email" autocomplete="email" required placeholder="aluno@email.com"></label>
+            <div class="form-row"><label>Cidade *<input id="profileCity" required placeholder="Rio Branco"></label><label>UF *<input id="profileUF" required maxlength="2" placeholder="AC"></label></div>
+            <label>Telefone <input id="profilePhone" autocomplete="tel" placeholder="(68) 99999-9999"></label>
+            <label>CPF <span class="optional">opcional e não exibido no certificado</span><input id="profileCPF" inputmode="numeric" placeholder="000.000.000-00"></label>
+            <label class="consent"><input id="profileConsent" type="checkbox"> <span>Confirmo que os dados informados estão corretos e autorizo seu uso para emissão do certificado e histórico desta formação.</span></label>
+            <button class="btn primary" type="submit">Salvar meus dados</button>
+          </form>
+        </article>
+        <article class="panel profile-summary">
+          <span class="kicker">COMO SERÁ USADO</span>
+          <h3>Certificação digital</h3>
+          <p>Ao concluir 20/20 microaulas e o Projeto Final, você poderá confirmar os dados, emitir o certificado com código único, QR de consulta e histórico da formação.</p>
+          <div class="profile-security"><b>Privacidade</b><span>O CPF é opcional e não aparece no certificado. Na V5 local, os dados ficam neste dispositivo.</span></div>
+        </article>
+      </div>
+    </section>
+
     <section id="view-certificate" class="view">
       <div id="certificateLocked" class="locked-screen">
-        <div>▤</div><h2>Certificado bloqueado</h2><p>Conclua a formação e o projeto final.</p>
+        <div>▤</div><h2>Certificado bloqueado</h2>
+        <p>Conclua as 20 microaulas e confirme o Projeto Final.</p>
+        <div class="unlock-progress"><span id="certUnlockText">0/20 aulas</span><div><i id="certUnlockBar"></i></div></div>
       </div>
-      <div id="certificateReady" class="certificate-wrap hidden">
-        <div class="certificate" id="certificate">
-          <div class="cert-top"><img src="assets/logo-joelson.jpeg"><span>CERTIFICADO DE CONCLUSÃO</span></div>
-          <h2>Formação Profissional em<br><b>Projetos de Infraestrutura de Recarga Veicular</b></h2>
-          <p>Certificamos que</p>
-          <h3 id="certName">Aluno(a)</h3>
-          <p>concluiu a formação com carga horária total de <b>80 horas</b>, abrangendo análise de demanda, curva de carga, dimensionamento, proteções, DLM, documentação e projeto aplicado.</p>
-          <div class="cert-sign"><div><b>Joelson Mendes</b><span>Especialista em Energia, IoT e Indústria 4.0</span></div><div><b>80 horas</b><span>Carga horária</span></div></div>
+
+      <div id="certificateIssue" class="certificate-issue hidden">
+        <div class="project-hero">
+          <span class="kicker">FORMAÇÃO CONCLUÍDA</span>
+          <h2>Confirme seus dados antes de emitir</h2>
+          <p>Depois da emissão, o certificado recebe código único, data de conclusão e QR de consulta.</p>
         </div>
-        <div class="certificate-actions">
-          <label>Nome do aluno<input id="studentName" placeholder="Digite o nome completo"></label>
-          <button class="btn primary" id="printCertBtn">Imprimir / Salvar PDF</button>
+        <div class="issue-grid">
+          <article class="panel confirm-data" id="confirmStudentData"></article>
+          <article class="panel">
+            <h3>Requisitos atendidos</h3>
+            <div class="req-list"><span>✓ 20/20 microaulas</span><span>✓ 100 questões respondidas</span><span>✓ Projeto Final concluído</span><span>✓ Carga horária: 80 h</span></div>
+            <button class="btn primary full" id="issueCertificateBtn">Confirmar e gerar certificado</button>
+          </article>
+        </div>
+      </div>
+
+      <div id="certificateReady" class="certificate-wrap hidden">
+        <div class="cert-toolbar no-print">
+          <div><span class="kicker">CERTIFICADO EMITIDO</span><strong id="toolbarCertCode"></strong></div>
+          <div class="toolbar-actions"><button class="btn outline" id="printHistoryBtn">Imprimir histórico</button><button class="btn primary" id="printCertBtn">Certificado + histórico PDF</button></div>
+        </div>
+
+        <div class="certificate-pages" id="certificatePages">
+          <section class="cert-page cert-front" id="certificate">
+            <div class="cert-border">
+              <div class="cert-top"><img src="assets/logo-joelson.jpeg" alt="Joelson Mendes"><span>CERTIFICADO DE CONCLUSÃO</span></div>
+              <div class="cert-course-tag">FORMAÇÃO PROFISSIONAL • 80 HORAS</div>
+              <h2>Projetos de Infraestrutura<br><b>de Recarga Veicular</b></h2>
+              <p class="certifies">Certificamos que</p>
+              <h3 id="certName">Aluno(a)</h3>
+              <p class="cert-copy">concluiu a formação profissional com carga horária total de <b>80 horas</b>, abrangendo análise de demanda, curva de carga, DLM, dimensionamento de circuitos, proteções elétricas, aterramento, especificação de SAVE, requisitos normativos, implantação em condomínios, gestão e projeto aplicado.</p>
+              <p class="cert-date" id="certDateText"></p>
+              <div class="cert-bottom">
+                <div class="cert-sign"><b>Joelson Mendes</b><span>Especialista em Energia, IoT e Indústria 4.0</span></div>
+                <div class="cert-verification"><img id="certQr" alt="QR de consulta"><div><b id="certCode"></b><span>QR de consulta do certificado</span><small id="certHashShort"></small></div></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="cert-page cert-history" id="historyPage">
+            <div class="history-head"><img src="assets/logo-joelson.jpeg"><div><span>HISTÓRICO DA FORMAÇÃO</span><h2>Projetos de Infraestrutura de Recarga Veicular</h2></div></div>
+            <div class="history-student"><div><small>ALUNO(A)</small><strong id="historyName"></strong></div><div><small>CÓDIGO</small><strong id="historyCode"></strong></div><div><small>CONCLUSÃO</small><strong id="historyDate"></strong></div></div>
+            <table class="history-table"><thead><tr><th>#</th><th>Microaula</th><th>CH</th><th>Status</th></tr></thead><tbody id="historyBody"></tbody></table>
+            <div class="history-project"><b>Projeto Final:</b> Concluído • <b>Carga horária total:</b> 80 horas</div>
+            <div class="history-note">Conteúdo programático desenvolvido em microaulas técnicas com cálculos, atividades práticas, questões de fixação, estudos de caso e projeto integrador.</div>
+          </section>
         </div>
       </div>
     </section>
@@ -139,12 +204,12 @@
     <section id="view-reward" class="view">
       <div id="rewardLocked" class="locked-screen">
         <div>⚡</div><h2>SAVE Engenharia bloqueado</h2>
-        <p>Conclua as 20 microaulas e confirme o Projeto Final para liberar o acesso profissional.</p>
+        <p>Conclua a formação, confirme o Projeto Final e emita seu certificado para liberar o acesso profissional.</p>
         <div class="unlock-progress"><span id="unlockText">0/20 aulas</span><div><i id="unlockBar"></i></div></div>
       </div>
       <div id="rewardReady" class="reward-ready hidden">
         <span class="kicker">BENEFÍCIO LIBERADO</span>
-        <h2>Parabéns! Seu acesso ao <span>SAVE Engenharia</span> está liberado.</h2>
+        <h2>Certificado emitido. Seu acesso ao <span>SAVE Engenharia</span> está liberado.</h2>
         <p>Use a ferramenta como apoio aos seus projetos profissionais. Continue aplicando os fundamentos aprendidos e valide sempre as condições reais da instalação e as normas vigentes.</p>
         <a class="btn primary big" href="https://saevengenharia.vercel.app/" target="_blank" rel="noopener">Abrir SAVE Engenharia ↗</a>
         <div class="reward-device"><img src="assets/save-ferramenta.png" alt="SAVE Engenharia"></div>
@@ -153,6 +218,22 @@
   </main>
 </div>
 
+
+<div id="profileModal" class="modal-backdrop hidden no-print">
+  <div class="profile-modal">
+    <button class="modal-close" id="profileModalClose" aria-label="Fechar">×</button>
+    <span class="kicker">ANTES DE COMEÇAR</span>
+    <h2>Cadastre seus dados</h2>
+    <p>Esses dados serão usados no certificado e histórico ao final da formação.</p>
+    <form id="profileModalForm" class="student-form compact">
+      <label>Nome completo *<input id="modalName" required autocomplete="name"></label>
+      <label>E-mail *<input id="modalEmail" type="email" required autocomplete="email"></label>
+      <div class="form-row"><label>Cidade *<input id="modalCity" required></label><label>UF *<input id="modalUF" maxlength="2" required></label></div>
+      <label class="consent"><input id="modalConsent" type="checkbox"> <span>Confirmo meus dados para fins de certificação desta formação.</span></label>
+      <button class="btn primary full" type="submit">Salvar e iniciar</button>
+    </form>
+  </div>
+</div>
 <div id="stickyLessonNav" class="sticky-lesson-nav hidden"></div>
 <div id="toast" class="toast"></div>
 

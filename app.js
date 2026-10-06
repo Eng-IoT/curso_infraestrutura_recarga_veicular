@@ -1,24 +1,32 @@
 
 const lessons=window.COURSE_LESSONS;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const STORAGE='curso-recarga-veicular-v4';
-let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||{completed:[],quiz:{},projectChecks:{},projectSubmitted:false,lastLesson:1,studentName:''};
+const STORAGE='curso-recarga-veicular-v5';
+const LEGACY_STORAGE='curso-recarga-veicular-v4';
+const DEFAULT_STATE={completed:[],quiz:{},projectChecks:{},projectSubmitted:false,lastLesson:1,student:{name:'',email:'',city:'',uf:'',phone:'',cpf:'',consent:false},certificate:null};
+let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||JSON.parse(localStorage.getItem(LEGACY_STORAGE)||'null')||structuredClone(DEFAULT_STATE);
+state.student=state.student||{name:state.studentName||'',email:'',city:'',uf:'',phone:'',cpf:'',consent:false};
+state.certificate=state.certificate||null;
 let currentLesson=null;
 
 function save(){localStorage.setItem(STORAGE,JSON.stringify(state));refreshGlobal()}
 function progress(){return state.completed.length}
-function unlocked(){return progress()===20 && state.projectSubmitted}
+function courseComplete(){return progress()===20 && state.projectSubmitted}
+function certificateIssued(){return !!state.certificate?.issued}
+function rewardUnlocked(){return courseComplete() && certificateIssued()}
+function profileComplete(){return !!(state.student?.name?.trim() && state.student?.email?.trim() && state.student?.city?.trim() && state.student?.uf?.trim() && state.student?.consent)}
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 function switchView(name){
   $$('.view').forEach(v=>v.classList.remove('active'));
   $(`#view-${name}`).classList.add('active');
   $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
-  const titles={home:['Formação Profissional','Projetos de Infraestrutura de Recarga Veicular • V3 Técnica'],course:['Microaulas','20 microaulas • 80 horas • conteúdo ampliado'],project:['Projeto Final','Projeto integrador da formação'],certificate:['Certificado','Liberado após a conclusão'],reward:['SAVE Engenharia','Benefício profissional de conclusão']};
+  const titles={home:['Formação Profissional','Projetos de Infraestrutura de Recarga Veicular • V5'],course:['Microaulas','20 microaulas • 80 horas • conteúdo ampliado'],project:['Projeto Final','Projeto integrador da formação'],profile:['Meus dados','Cadastro para certificado e histórico'],certificate:['Certificado','Emissão após conclusão integral'],reward:['SAVE Engenharia','Benefício profissional de conclusão']};
   if(titles[name]){$('#pageTitle').textContent=titles[name][0];$('#pageSubtitle').textContent=titles[name][1]}
   $('#stickyLessonNav').classList.add('hidden'); currentLesson=null;
   if(innerWidth<900)$('#sidebar').classList.remove('open');
   window.scrollTo({top:0,behavior:'smooth'});
   if(name==='project')renderProject();
+  if(name==='profile')renderProfile();
   if(name==='certificate')renderCertificate();
   if(name==='reward')renderReward();
 }
@@ -203,22 +211,105 @@ function renderProjectStatus(){
   $('#projectBigStatus').textContent=state.projectSubmitted?'✓':'🔒';
   $('#projectBigStatus').style.color=state.projectSubmitted?'#18b832':'';
 }
-function submitProject(){state.projectSubmitted=true; save(); renderProjectStatus(); toast('Projeto Final confirmado — benefício liberado quando o curso estiver 100% concluído')}
-function renderCertificate(){const ok=unlocked(); $('#certificateLocked').classList.toggle('hidden',ok); $('#certificateReady').classList.toggle('hidden',!ok); $('#studentName').value=state.studentName||''; $('#certName').textContent=state.studentName||'Aluno(a)'}
-function renderReward(){const ok=unlocked(); $('#rewardLocked').classList.toggle('hidden',ok); $('#rewardReady').classList.toggle('hidden',!ok); $('#unlockText').textContent=`${progress()}/20 aulas • Projeto ${state.projectSubmitted?'entregue':'pendente'}`; $('#unlockBar').style.width=`${Math.round(progress()/20*100)}%`;}
+function submitProject(){state.projectSubmitted=true; save(); renderProjectStatus(); toast('Projeto Final confirmado — conclua as aulas e emita seu certificado')}
+
+function renderProfile(){
+  const st=state.student||{};
+  const map={profileName:'name',profileEmail:'email',profileCity:'city',profileUF:'uf',profilePhone:'phone',profileCPF:'cpf'};
+  Object.entries(map).forEach(([id,k])=>{const el=document.getElementById(id); if(el)el.value=st[k]||''});
+  if($('#profileConsent')) $('#profileConsent').checked=!!st.consent;
+}
+function saveProfileFrom(prefix='profile'){
+  const get=id=>document.getElementById(id)?.value?.trim()||'';
+  const modal=prefix==='modal';
+  const name=get(modal?'modalName':'profileName'),email=get(modal?'modalEmail':'profileEmail'),city=get(modal?'modalCity':'profileCity'),uf=get(modal?'modalUF':'profileUF').toUpperCase();
+  const consent=document.getElementById(modal?'modalConsent':'profileConsent')?.checked;
+  if(!name||!email||!city||!uf||!consent){toast('Preencha os campos obrigatórios e confirme os dados'); return false}
+  state.student={...state.student,name,email,city,uf,consent};
+  if(!modal){state.student.phone=get('profilePhone'); state.student.cpf=get('profileCPF')}
+  save(); toast('Dados do aluno salvos'); return true;
+}
+function openProfileModal(){
+  const st=state.student||{};
+  $('#modalName').value=st.name||''; $('#modalEmail').value=st.email||''; $('#modalCity').value=st.city||''; $('#modalUF').value=st.uf||''; $('#modalConsent').checked=!!st.consent;
+  $('#profileModal').classList.remove('hidden');
+}
+function closeProfileModal(){ $('#profileModal').classList.add('hidden') }
+function ensureProfile(callback){ if(profileComplete()){callback(); return} openProfileModal(); window.__afterProfile=callback; }
+function formatDateISO(d=new Date()){return d.toISOString().slice(0,10)}
+function formatDateBR(iso){const [y,m,d]=iso.split('-');return `${d}/${m}/${y}`}
+function longDateBR(iso){const [y,m,d]=iso.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}
+function randomHex(n=12){const a=new Uint8Array(Math.ceil(n/2));crypto.getRandomValues(a);return [...a].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,n)}
+function makeCertCode(){const y=new Date().getFullYear(); const tail=(Date.now()%1000000).toString().padStart(6,'0'); return `JM-IRV-${y}-${tail}`}
+function makeValidationUrl(cert){
+  const base=location.protocol==='file:'?'validar.html':`${location.origin}${location.pathname.replace(/[^/]*$/,'')}validar.html`;
+  const q=new URLSearchParams({codigo:cert.code,h:cert.hash,n:state.student.name,c:'Projetos de Infraestrutura de Recarga Veicular',d:cert.date});
+  return `${base}?${q.toString()}`;
+}
+function issueCertificate(){
+  if(!courseComplete()){toast('A formação ainda não está concluída');return}
+  if(!profileComplete()){openProfileModal();return}
+  if(!state.certificate){
+    state.certificate={issued:true,code:makeCertCode(),hash:randomHex(20),date:formatDateISO(),issuedAt:new Date().toISOString()};
+    state.certificate.validationUrl=makeValidationUrl(state.certificate);
+  } else {state.certificate.issued=true; state.certificate.validationUrl=state.certificate.validationUrl||makeValidationUrl(state.certificate)}
+  save(); renderCertificate(); renderReward(); toast('Certificado emitido. SAVE Engenharia liberado.');
+}
+function renderHistory(){
+  if(!certificateIssued())return;
+  $('#historyName').textContent=state.student.name; $('#historyCode').textContent=state.certificate.code; $('#historyDate').textContent=formatDateBR(state.certificate.date);
+  $('#historyBody').innerHTML=lessons.map(l=>`<tr><td>${l.num}</td><td>${l.title}</td><td>4 h</td><td>Concluída ✓</td></tr>`).join('');
+}
+function renderCertificate(){
+  const ok=courseComplete(),issued=certificateIssued();
+  $('#certificateLocked').classList.toggle('hidden',ok);
+  $('#certificateIssue').classList.toggle('hidden',!ok||issued);
+  $('#certificateReady').classList.toggle('hidden',!issued);
+  $('#certUnlockText').textContent=`${progress()}/20 aulas • Projeto ${state.projectSubmitted?'concluído':'pendente'}`;
+  $('#certUnlockBar').style.width=`${Math.round(progress()/20*100)}%`;
+  if(ok&&!issued){
+    const s=state.student||{};
+    $('#confirmStudentData').innerHTML=`<h3>Dados que serão impressos</h3><div class="confirm-lines"><span><small>Nome</small><b>${s.name||'Não informado'}</b></span><span><small>E-mail</small><b>${s.email||'Não informado'}</b></span><span><small>Localidade</small><b>${s.city||'—'} - ${s.uf||'—'}</b></span></div><button class="btn outline" data-edit-profile>Corrigir dados</button>`;
+    const e=$('[data-edit-profile]'); if(e)e.onclick=()=>switchView('profile');
+  }
+  if(issued){
+    const c=state.certificate,s=state.student;
+    $('#certName').textContent=s.name; $('#certDateText').textContent=`${s.city} - ${s.uf}, ${longDateBR(c.date)}.`;
+    $('#certCode').textContent=c.code; $('#toolbarCertCode').textContent=c.code; $('#certHashShort').textContent=`Registro ${c.hash.slice(0,10).toUpperCase()}`;
+    const qr=`https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&data=${encodeURIComponent(c.validationUrl)}`; $('#certQr').src=qr;
+    renderHistory();
+  }
+}
+function printPages(mode='all'){
+  document.body.classList.remove('print-cert-only','print-history-only');
+  if(mode==='cert')document.body.classList.add('print-cert-only');
+  if(mode==='history')document.body.classList.add('print-history-only');
+  setTimeout(()=>window.print(),80);
+}
+function renderReward(){
+  const ok=rewardUnlocked(); $('#rewardLocked').classList.toggle('hidden',ok); $('#rewardReady').classList.toggle('hidden',!ok);
+  $('#unlockText').textContent=`${progress()}/20 aulas • Projeto ${state.projectSubmitted?'concluído':'pendente'} • Certificado ${certificateIssued()?'emitido':'pendente'}`;
+  $('#unlockBar').style.width=`${certificateIssued()?100:Math.round(progress()/20*90)}%`;
+}
 function refreshGlobal(){
   const p=progress(), pct=Math.round(p/20*100);
   $('#progressPct').textContent=pct+'%'; $('#progressText').textContent=`${p} de 20 aulas`;
-  $('#progressRing').style.setProperty('--p',pct); $('#rewardLock').textContent=unlocked()?'✓':'🔒'; $('#homeRewardStatus').textContent=unlocked()?'✓ Liberado':'🔒 Bloqueado'; renderCards();
+  $('#progressRing').style.setProperty('--p',pct); $('#rewardLock').textContent=rewardUnlocked()?'✓':'🔒'; $('#homeRewardStatus').textContent=rewardUnlocked()?'✓ Liberado':'🔒 Bloqueado'; renderCards();
 }
-$('#startBtn').onclick=()=>openLesson(state.lastLesson||1);
-$('#continueBtn').onclick=()=>openLesson(state.lastLesson||1);
+$('#startBtn').onclick=()=>ensureProfile(()=>openLesson(state.lastLesson||1));
+$('#continueBtn').onclick=()=>ensureProfile(()=>openLesson(state.lastLesson||1));
 $$('[data-go]').forEach(b=>b.onclick=()=>switchView(b.dataset.go));
 $$('.nav-item').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
 $('#submitProjectBtn').onclick=submitProject;
-$('#studentName').oninput=e=>{state.studentName=e.target.value; $('#certName').textContent=e.target.value||'Aluno(a)'; save()};
-$('#printCertBtn').onclick=()=>window.print();
+$('#studentProfileForm')?.addEventListener('submit',e=>{e.preventDefault();saveProfileFrom('profile');renderProfile()});
+$('#profileModalForm')?.addEventListener('submit',e=>{e.preventDefault();if(saveProfileFrom('modal')){closeProfileModal();const cb=window.__afterProfile;window.__afterProfile=null;if(cb)cb();}});
+$('#profileModalClose')?.addEventListener('click',closeProfileModal);
+$('#issueCertificateBtn')?.addEventListener('click',issueCertificate);
+$('#printCertBtn')?.addEventListener('click',()=>printPages('all'));
+$('#printHistoryBtn')?.addEventListener('click',()=>printPages('history'));
+window.addEventListener('afterprint',()=>document.body.classList.remove('print-cert-only','print-history-only'));
 window.addEventListener('scroll',()=>{if(currentLesson){const art=$('#lessonArticle').getBoundingClientRect(); $('#stickyLessonNav').classList.toggle('hidden',art.bottom<180)}});
 refreshGlobal();
+if(!localStorage.getItem(STORAGE))save();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});

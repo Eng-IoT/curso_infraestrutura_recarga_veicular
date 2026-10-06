@@ -1,6 +1,6 @@
 {
-  "name": "Formação - Infraestrutura de Recarga Veicular",
-  "short_name": "Curso Recarga VE",
+  "name": "Formação V5 - Infraestrutura de Recarga Veicular",
+  "short_name": "Recarga VE V5",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f7faf8",
