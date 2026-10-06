@@ -1,20 +1,21 @@
+
 const lessons=window.COURSE_LESSONS;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const STORAGE='curso-recarga-veicular-v1';
+const STORAGE='curso-recarga-veicular-v2';
 let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||{completed:[],quiz:{},projectChecks:{},projectSubmitted:false,lastLesson:1,studentName:''};
 let currentLesson=null;
 
 function save(){localStorage.setItem(STORAGE,JSON.stringify(state));refreshGlobal()}
 function progress(){return state.completed.length}
 function unlocked(){return progress()===20 && state.projectSubmitted}
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 function switchView(name){
   $$('.view').forEach(v=>v.classList.remove('active'));
   $(`#view-${name}`).classList.add('active');
   $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
-  const titles={home:['Formação Profissional','Projetos de Infraestrutura de Recarga Veicular'],course:['Microaulas','20 microaulas • 80 horas'],project:['Projeto Final','Projeto integrador da formação'],certificate:['Certificado','Liberado após a conclusão'],reward:['SAVE Engenharia','Benefício profissional de conclusão']};
+  const titles={home:['Formação Profissional','Projetos de Infraestrutura de Recarga Veicular • V3 Técnica'],course:['Microaulas','20 microaulas • 80 horas • conteúdo ampliado'],project:['Projeto Final','Projeto integrador da formação'],certificate:['Certificado','Liberado após a conclusão'],reward:['SAVE Engenharia','Benefício profissional de conclusão']};
   if(titles[name]){$('#pageTitle').textContent=titles[name][0];$('#pageSubtitle').textContent=titles[name][1]}
-  $('#stickyLessonNav').classList.add('hidden');currentLesson=null;
+  $('#stickyLessonNav').classList.add('hidden'); currentLesson=null;
   if(innerWidth<900)$('#sidebar').classList.remove('open');
   window.scrollTo({top:0,behavior:'smooth'});
   if(name==='project')renderProject();
@@ -27,36 +28,122 @@ function renderCards(){
     <div class="lesson-body"><h4>${l.title}</h4><p>${l.description}</p></div></article>`;
   $('#homeLessons').innerHTML=lessons.slice(0,4).map(card).join('');
   $('#courseLessons').innerHTML=lessons.map(l=>`<article class="lesson-row ${state.completed.includes(l.id)?'done':''}" data-lesson="${l.id}">
-    <div class="number">${l.num}</div><div><h4>${l.title}</h4><p>${l.description}</p></div><div class="status">${state.completed.includes(l.id)?'✓ CONCLUÍDA':'4 HORAS →'}</div></article>`).join('');
+    <div class="number">${l.num}</div><div><h4>${l.title}</h4><p>${l.description}</p></div><div class="status">${state.completed.includes(l.id)?'✓ CONCLUÍDA':'5 QUESTÕES • 4H'}</div></article>`).join('');
   $$('[data-lesson]').forEach(x=>x.onclick=()=>openLesson(+x.dataset.lesson));
 }
+function renderReferences(list=[]){
+  if(!list.length) return '';
+  return `<section class="lesson-section"><h3>Fontes técnicas consultadas</h3><div class="ref-grid">${list.map(([label,url])=>`<a class="ref-chip" href="${url}" target="_blank" rel="noopener">${label}</a>`).join('')}</div></section>`;
+}
+function renderNorms(list=[]){
+  if(!list.length) return '';
+  return `<section class="lesson-section"><h3>Normas e documentos aplicáveis</h3><div class="pill-grid">${list.map(x=>`<span class="pill">${x}</span>`).join('')}</div></section>`;
+}
+function renderHighlights(list=[]){
+  if(!list.length) return '';
+  return `<section class="lesson-section"><h3>Pontos-chave da microaula</h3><div class="highlight-grid">${list.map(x=>`<div class="highlight-item">${x}</div>`).join('')}</div></section>`;
+}
+function renderSupportImage(l){
+  if(!l.supportImage) return '';
+  return `<section class="lesson-section"><h3>Material visual de apoio</h3><figure class="support-figure"><img src="assets/${l.supportImage}" alt="${l.supportCaption||''}"><figcaption>${l.supportCaption||''}</figcaption></figure></section>`;
+}
+
+function renderTechnicalSections(list=[]){
+  if(!list.length)return '';
+  return list.map(s=>`<section class="lesson-section technical-section"><h3>${s.title}</h3><div class="technical-body">${s.html}</div></section>`).join('');
+}
+function simulatorHTML(type){
+  const head=(title,sub)=>`<section class="lesson-section simulator-box"><div class="sim-head"><div><span class="kicker">LABORATÓRIO DE CÁLCULO</span><h3>${title}</h3><p>${sub}</p></div><span class="sim-badge">INTERATIVO</span></div>`;
+  if(type==='energy') return head('Energia, SOC e tempo','Calcule energia necessária e potência média de recarga.')+`<div class="sim-grid"><label>Capacidade da bateria (kWh)<input id="eCap" type="number" value="60" step="0.1"></label><label>SOC inicial (%)<input id="eIni" type="number" value="30"></label><label>SOC final (%)<input id="eFim" type="number" value="90"></label><label>Eficiência (%)<input id="eEff" type="number" value="92"></label><label>Janela disponível (h)<input id="eH" type="number" value="8" step="0.1"></label></div><button class="btn primary sim-calc" data-sim="energy">Calcular</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='curve') return head('Potência disponível por horário','Informe um ponto da curva para calcular margem operacional.')+`<div class="sim-grid"><label>Limite da instalação (kW)<input id="cvLim" type="number" value="200"></label><label>Carga base no horário (kW)<input id="cvBase" type="number" value="170"></label><label>Reserva de projeto (kW)<input id="cvRes" type="number" value="0"></label><label>Potência SAVE desejada (kW)<input id="cvSave" type="number" value="60"></label></div><button class="btn primary sim-calc" data-sim="curve">Calcular margem</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='dlm') return head('DLM — distribuição de potência','Simule o limite disponível para vários veículos conectados.')+`<div class="sim-grid"><label>Limite da instalação (kW)<input id="dLim" type="number" value="200"></label><label>Carga base atual (kW)<input id="dBase" type="number" value="130"></label><label>Reserva operacional (kW)<input id="dRes" type="number" value="10"></label><label>Veículos conectados<input id="dN" type="number" value="10"></label><label>Máx. por veículo (kW)<input id="dMax" type="number" value="7.4" step="0.1"></label></div><button class="btn primary sim-calc" data-sim="dlm">Simular DLM</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='circuit') return head('Coordenação Ib ≤ In ≤ Iz','Calcule a corrente e verifique a coordenação usando Iz informado a partir da tabela/método escolhido.')+`<div class="sim-grid"><label>Potência do SAVE (kW)<input id="cP" type="number" value="7.4" step="0.1"></label><label>Tensão (V)<input id="cV" type="number" value="220"></label><label>Sistema<select id="cPh"><option value="1">Monofásico</option><option value="3">Trifásico</option></select></label><label>Fator de potência<input id="cFp" type="number" value="0.99" step="0.01"></label><label>Rendimento<input id="cEff" type="number" value="1" step="0.01"></label><label>Iz da tabela (A)<input id="cIz" type="number" value="50"></label><label>Fator temperatura<input id="cFt" type="number" value="1" step="0.01"></label><label>Fator agrupamento<input id="cFa" type="number" value="1" step="0.01"></label><label>Disjuntor escolhido In (A)<input id="cIn" type="number" value="40"></label></div><button class="btn primary sim-calc" data-sim="circuit">Verificar circuito</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='voltdrop') return head('Queda de tensão','Estimativa resistiva para estudo e comparação de alternativas.')+`<div class="sim-grid"><label>Corrente (A)<input id="vI" type="number" value="32"></label><label>Comprimento (m)<input id="vL" type="number" value="30"></label><label>Seção (mm²)<input id="vS" type="number" value="10"></label><label>Tensão nominal (V)<input id="vV" type="number" value="220"></label><label>Sistema<select id="vPh"><option value="1">Monofásico</option><option value="3">Trifásico</option></select></label><label>Resistividade ρ (Ω·mm²/m)<input id="vRho" type="number" value="0.0175" step="0.0001"></label></div><button class="btn primary sim-calc" data-sim="voltdrop">Calcular ΔV</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='protection') return head('Assistente DR / RDC-DD / DPS','Ferramenta didática de decisão. A seleção final deve seguir norma e manual do modelo específico.')+`<div class="sim-grid"><label>RDC-DD / detecção CC 6 mA integrada?<select id="pDc"><option value="yes">Sim, comprovada no manual</option><option value="no">Não</option><option value="unknown">Não sei / não informado</option></select></label><label>Fabricante especifica DR Tipo A a montante?<select id="pA"><option value="yes">Sim</option><option value="no">Não</option><option value="unknown">Não sei</option></select></label><label>Há SPDA / exposição que demande DPS Tipo 1 na origem?<select id="pSpda"><option value="no">Não / avaliar</option><option value="yes">Sim</option></select></label><label>Quadro SAVE distante da proteção a montante?<select id="pFar"><option value="yes">Sim</option><option value="no">Não</option></select></label></div><button class="btn primary sim-calc" data-sim="protection">Analisar proteção</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='shortcircuit') return head('Corrente de curto-circuito simplificada','Use para aprendizado. Estudos executivos podem exigir modelo completo da rede.')+`<div class="sim-grid"><label>Tensão (V)<input id="sV" type="number" value="220"></label><label>Impedância equivalente Z (Ω)<input id="sZ" type="number" value="0.05" step="0.001"></label><label>Tipo de falta<select id="sType"><option value="mono">Fase-neutro / monofásica</option><option value="tri">Trifásica</option></select></label><label>Capacidade do disjuntor (kA)<input id="sIcu" type="number" value="6" step="0.1"></label></div><button class="btn primary sim-calc" data-sim="shortcircuit">Calcular Icc</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='transformer') return head('Transformador e balanceamento','Avalie carga aparente total e distribuição de carregadores monofásicos.')+`<div class="sim-grid"><label>Transformador (kVA)<input id="tKva" type="number" value="225"></label><label>Demanda existente (kW)<input id="tBase" type="number" value="150"></label><label>FP existente<input id="tFp" type="number" value="0.95" step="0.01"></label><label>Potência SAVE gerenciada (kW)<input id="tEv" type="number" value="60"></label><label>FP SAVE<input id="tEvFp" type="number" value="0.99" step="0.01"></label><label>Carregadores fase R<input id="tR" type="number" value="4"></label><label>Carregadores fase S<input id="tS" type="number" value="4"></label><label>Carregadores fase T<input id="tT" type="number" value="4"></label></div><button class="btn primary sim-calc" data-sim="transformer">Avaliar sistema</button><div class="sim-result" id="simResult"></div></section>`;
+  if(type==='energisa') return head('Checklist Energisa / pré-validação','Marque os itens principais antes de organizar o protocolo.')+`<div class="sim-checks" id="eChecks">${['Ficha técnica dos SAVE','Curva/demanda','Diagrama unifilar','Memorial de cálculo','Proteções DR/RDC-DD/DPS','Aterramento','Dados da entrada/transformador','ART/TRT e documentos','Versão vigente NDU 042'].map(x=>`<label><input type="checkbox"> ${x}</label>`).join('')}</div><button class="btn primary sim-calc" data-sim="energisa">Verificar checklist</button><div class="sim-result" id="simResult"></div></section>`;
+  return '';
+}
+function bindSimulator(type){
+  const b=document.querySelector('.sim-calc'); if(!b)return;
+  b.onclick=()=>runSimulator(type);
+}
+function n(id){return Number(document.getElementById(id)?.value||0)}
+function simOut(html,cls=''){const e=document.getElementById('simResult'); if(e){e.className='sim-result '+cls;e.innerHTML=html}}
+function runSimulator(type){
+  if(type==='energy'){
+    const cap=n('eCap'), si=n('eIni')/100, sf=n('eFim')/100, eff=n('eEff')/100, h=n('eH');
+    const ebat=cap*(sf-si), erede=eff>0?ebat/eff:0, p=h>0?erede/h:0;
+    simOut(`<b>Energia na bateria:</b> ${ebat.toFixed(2)} kWh<br><b>Energia estimada da rede:</b> ${erede.toFixed(2)} kWh<br><b>Potência média necessária:</b> ${p.toFixed(2)} kW<br><span>Substituição: ${cap} × (${(sf*100).toFixed(0)}% − ${(si*100).toFixed(0)}%) = ${ebat.toFixed(2)} kWh</span>`);
+  } else if(type==='curve'){
+    const lim=n('cvLim'),base=n('cvBase'),res=n('cvRes'),save=n('cvSave'),disp=lim-base-res,margin=disp-save;
+    simOut(`<b>Potência disponível para SAVE:</b> ${disp.toFixed(1)} kW<br><b>Margem após a recarga desejada:</b> ${margin.toFixed(1)} kW<br>${margin>=0?'✓ Cenário cabe no limite adotado.':'⚠ Cenário ultrapassa o limite adotado.'}`,margin>=0?'ok':'bad');
+  } else if(type==='dlm'){
+    const lim=n('dLim'),base=n('dBase'),res=n('dRes'),N=Math.max(1,n('dN')),mx=n('dMax'),disp=Math.max(0,lim-base-res),total=Math.min(disp,N*mx),each=total/N;
+    simOut(`<b>Disponível ao DLM:</b> ${disp.toFixed(1)} kW<br><b>Potência total distribuída:</b> ${total.toFixed(1)} kW<br><b>Média por veículo:</b> ${each.toFixed(2)} kW<br><span>O algoritmo real pode aplicar prioridades em vez de divisão igualitária.</span>`);
+  } else if(type==='circuit'){
+    const P=n('cP')*1000,V=n('cV'),ph=n('cPh'),fp=n('cFp')||1,eff=n('cEff')||1,iz=n('cIz'),ft=n('cFt')||1,fa=n('cFa')||1,In=n('cIn');
+    const Ib=ph===3?P/(Math.sqrt(3)*V*fp*eff):P/(V*fp*eff), Iz=iz*ft*fa, ok=Ib<=In&&In<=Iz;
+    simOut(`<b>Ib:</b> ${Ib.toFixed(2)} A<br><b>Iz corrigida:</b> ${Iz.toFixed(2)} A<br><b>In:</b> ${In.toFixed(1)} A<br><b>Verificação:</b> ${Ib.toFixed(2)} ≤ ${In.toFixed(1)} ≤ ${Iz.toFixed(2)} → ${ok?'CONFORME nesta verificação':'REVISAR'}<br><span>Confirme método de instalação, seção mínima, queda de tensão, curto-circuito e fabricante.</span>`,ok?'ok':'bad');
+  } else if(type==='voltdrop'){
+    const I=n('vI'),L=n('vL'),S=n('vS'),V=n('vV'),ph=n('vPh'),rho=n('vRho');
+    const dv=ph===3?Math.sqrt(3)*L*I*rho/S:2*L*I*rho/S, pct=100*dv/V;
+    simOut(`<b>ΔV:</b> ${dv.toFixed(2)} V<br><b>ΔV%:</b> ${pct.toFixed(2)}%<br><span>Estimativa resistiva. Verifique resistência à temperatura de operação e critérios normativos do projeto completo.</span>`);
+  } else if(type==='protection'){
+    const dc=document.getElementById('pDc').value,a=document.getElementById('pA').value,spda=document.getElementById('pSpda').value,far=document.getElementById('pFar').value;
+    let dr='';
+    if(dc==='yes'&&a==='yes') dr='Manual comprova RDC-DD/6 mA e especifica Tipo A: avaliar DR Tipo A a montante com IΔn conforme fabricante/norma (exemplos consultados usam ≤30 mA).';
+    else if(dc==='unknown'||a==='unknown') dr='Informação insuficiente: NÃO feche a especificação. Consulte o manual do modelo e a norma aplicável.';
+    else dr='Não presuma Tipo A. Avalie DR Tipo B ou outra solução admitida pelo fabricante/norma para corrente residual CC.';
+    let dps=spda==='yes'?'Na origem, avaliar DPS Tipo 1 ou 1+2 conforme análise de risco/SPDA e coordenação.':'Na distribuição, DPS Tipo 2 é uma solução típica a avaliar conforme instalação.';
+    if(far==='yes') dps+=' Para quadro/carga distante, reavalie coordenação e eventual DPS adicional; Tipo 3 é complementar próximo à carga sensível.';
+    simOut(`<b>DR/RDC-DD:</b><br>${dr}<br><br><b>DPS:</b><br>${dps}<br><br><span>Verifique Uc, Up, In/Imax, Iimp quando aplicável, esquema de aterramento e dispositivo de backup.</span>`);
+  } else if(type==='shortcircuit'){
+    const V=n('sV'),Z=n('sZ'),typ=document.getElementById('sType').value,icu=n('sIcu')*1000; const I=Z>0?(typ==='tri'?V/(Math.sqrt(3)*Z):V/Z):0; const ok=icu>=I;
+    simOut(`<b>Icc estimada:</b> ${(I/1000).toFixed(2)} kA<br><b>Capacidade informada do disjuntor:</b> ${(icu/1000).toFixed(2)} kA<br>${ok?'✓ Capacidade ≥ Icc estimada.':'⚠ Capacidade inferior à Icc estimada.'}<br><span>Cálculo simplificado; confirmar impedância e método de estudo.</span>`,ok?'ok':'bad');
+  } else if(type==='transformer'){
+    const kva=n('tKva'),base=n('tBase'),fp=n('tFp')||1,ev=n('tEv'),evfp=n('tEvFp')||1,r=n('tR'),s=n('tS'),t=n('tT'); const sb=base/fp,se=ev/evfp,st=sb+se,load=100*st/kva,margin=kva-st; const mx=Math.max(r,s,t),mn=Math.min(r,s,t),imb=mx?100*(mx-mn)/mx:0;
+    simOut(`<b>Demanda aparente existente:</b> ${sb.toFixed(1)} kVA<br><b>SAVE:</b> ${se.toFixed(1)} kVA<br><b>Total:</b> ${st.toFixed(1)} kVA<br><b>Carregamento do transformador:</b> ${load.toFixed(1)}%<br><b>Margem aparente:</b> ${margin.toFixed(1)} kVA<br><b>Desequilíbrio por quantidade R/S/T:</b> ${imb.toFixed(1)}%<br><span>Avalie também as demais cargas reais de cada fase.</span>`,load<=100?'ok':'bad');
+  } else if(type==='energisa'){
+    const c=[...document.querySelectorAll('#eChecks input')],done=c.filter(x=>x.checked).length,pct=100*done/c.length; simOut(`<b>${done}/${c.length} itens marcados (${pct.toFixed(0)}%).</b><br>${done===c.length?'✓ Checklist básico completo para revisão técnica.':'Ainda existem itens pendentes antes da revisão final.'}`);
+  }
+}
+
 function openLesson(id){
-  currentLesson=id;state.lastLesson=id;save();
+  currentLesson=id; state.lastLesson=id; save();
   const l=lessons[id-1], done=state.completed.includes(id);
-  $('#pageTitle').textContent=`Microaula ${l.num}`;$('#pageSubtitle').textContent=l.title;
+  $('#pageTitle').textContent=`Microaula ${l.num}`; $('#pageSubtitle').textContent=l.title;
   const qhtml=l.quiz.map((q,qi)=>`<div class="question" data-q="${qi}"><strong>${qi+1}. ${q[0]}</strong><div class="options">${q[2].map(o=>`<button class="option ${state.quiz[id]?.[qi]===o?'selected':''}" data-answer="${encodeURIComponent(o)}">${o}</button>`).join('')}</div></div>`).join('');
   $('#lessonArticle').innerHTML=`<div class="lesson-hero">
-    <div class="lesson-hero-img"><img src="assets/${l.image}" alt=""><div class="lesson-hero-overlay"><span>MICROAULA ${l.num} • 4 HORAS</span><h2>${l.title}</h2><p>${l.description}</p></div></div>
+    <div class="lesson-hero-img"><img src="assets/${l.image}" alt=""><div class="lesson-hero-overlay"><span>MICROAULA ${l.num} • 4 HORAS • CONTEÚDO AMPLIADO</span><h2>${l.title}</h2><p>${l.description}</p></div></div>
     <div class="lesson-content">
       <section class="lesson-section"><h3>Objetivos de aprendizagem</h3><div class="objective-list">${l.objectives.map(x=>`<div class="objective">✓ ${x}</div>`).join('')}</div></section>
-      <section class="lesson-section"><h3>Conteúdo técnico</h3><div class="theory">${l.theory}</div></section>
+      <section class="lesson-section"><h3>Conteúdo técnico ampliado</h3><div class="theory">${l.theory}</div></section>
+      ${renderHighlights(l.highlights)}
+      ${renderNorms(l.norms)}
       <section class="lesson-section"><h3>Fórmula / relação principal</h3><div class="formula"><small>MEMÓRIA DE CÁLCULO</small>${l.formula}</div></section>
       <section class="lesson-section"><h3>Exemplo orientado</h3><div class="example">${l.example}</div></section>
       <section class="lesson-section"><h3>Atividade prática • Memória do Projeto</h3><div class="activity">${l.activity}</div></section>
-      <section class="lesson-section"><h3>Quiz rápido</h3><div class="quiz">${qhtml}</div></section>
+      ${renderSupportImage(l)}
+      ${renderTechnicalSections(l.technicalSections)}
+      ${simulatorHTML(l.simulatorType)}
+      <section class="lesson-section"><h3>Praticando • 05 questões</h3><div class="quiz">${qhtml}</div></section>
+      ${renderReferences(l.references)}
     </div></div>`;
   $$('.option').forEach(b=>b.onclick=e=>answerQuiz(id,+e.target.closest('.question').dataset.q,decodeURIComponent(b.dataset.answer)));
+  bindSimulator(l.simulatorType);
   renderLessonNav();
-  $$('.view').forEach(v=>v.classList.remove('active'));$('#view-lesson').classList.add('active');
+  $$('.view').forEach(v=>v.classList.remove('active')); $('#view-lesson').classList.add('active');
   $$('.nav-item').forEach(b=>b.classList.remove('active'));
   $('#stickyLessonNav').classList.remove('hidden');
   window.scrollTo({top:0});
 }
 function answerQuiz(id,qi,answer){
-  state.quiz[id]??={};state.quiz[id][qi]=answer;save();
-  const l=lessons[id-1],correct=l.quiz[qi][1];
+  state.quiz[id]??={}; state.quiz[id][qi]=answer; save();
+  const l=lessons[id-1], correct=l.quiz[qi][1];
   const q=$(`.question[data-q="${qi}"]`);
-  q.querySelectorAll('.option').forEach(b=>{const val=decodeURIComponent(b.dataset.answer);b.classList.toggle('correct',val===correct);b.classList.toggle('wrong',val===answer&&val!==correct)});
+  q.querySelectorAll('.option').forEach(b=>{const val=decodeURIComponent(b.dataset.answer); b.classList.toggle('correct',val===correct); b.classList.toggle('wrong',val===answer&&val!==correct)});
   toast(answer===correct?'Resposta correta':'Revise este conceito');
 }
 function allQuizAnswered(id){
@@ -64,18 +151,18 @@ function allQuizAnswered(id){
   return l.quiz.every((_,i)=>q[i]!==undefined);
 }
 function completeLesson(id){
-  if(!allQuizAnswered(id)){toast('Responda ao quiz antes de concluir a aula');return}
-  if(!state.completed.includes(id))state.completed.push(id);
-  state.completed.sort((a,b)=>a-b);save();toast('Microaula concluída');
-  renderLessonNav();renderCards();
+  if(!allQuizAnswered(id)){toast('Responda as 05 questões antes de concluir a aula'); return}
+  if(!state.completed.includes(id)) state.completed.push(id);
+  state.completed.sort((a,b)=>a-b); save(); toast('Microaula concluída');
+  renderLessonNav(); renderCards();
 }
 function renderLessonNav(){
   if(!currentLesson)return;
-  const id=currentLesson,done=state.completed.includes(id),prev=id>1,next=id<20;
+  const id=currentLesson, done=state.completed.includes(id), prev=id>1, next=id<20;
   const html=`<button class="btn outline" ${!prev?'disabled':''} data-prev="${id-1}">← Aula anterior</button>
     <button class="btn complete" data-complete="${id}">${done?'✓ Aula concluída':'✓ Concluir aula'}</button>
     <button class="btn primary" ${!next||!done?'disabled':''} data-next="${id+1}">${id===20?'Finalizar':'Próxima aula →'}</button>`;
-  $('#lessonEndNav').innerHTML=html;$('#stickyLessonNav').innerHTML=html;
+  $('#lessonEndNav').innerHTML=html; $('#stickyLessonNav').innerHTML=html;
   $$('[data-prev]').forEach(b=>b.onclick=()=>openLesson(+b.dataset.prev));
   $$('[data-complete]').forEach(b=>b.onclick=()=>completeLesson(+b.dataset.complete));
   $$('[data-next]').forEach(b=>b.onclick=()=>{if(id<20)openLesson(+b.dataset.next);else switchView('project')});
@@ -94,7 +181,7 @@ const deliverableNames=[
 ];
 function renderProject(){
   $('#deliverables').innerHTML=deliverableNames.map(([k,t,d])=>`<label class="deliverable"><input type="checkbox" data-del="${k}" ${state.projectChecks[k]?'checked':''}><div><strong>${t}</strong><small>${d}</small></div></label>`).join('');
-  $$('[data-del]').forEach(c=>c.onchange=()=>{state.projectChecks[c.dataset.del]=c.checked;save();renderProjectStatus()});
+  $$('[data-del]').forEach(c=>c.onchange=()=>{state.projectChecks[c.dataset.del]=c.checked; save(); renderProjectStatus()});
   renderProjectStatus();
 }
 function renderProjectStatus(){
@@ -104,23 +191,13 @@ function renderProjectStatus(){
   $('#projectBigStatus').textContent=state.projectSubmitted?'✓':'🔒';
   $('#projectBigStatus').style.color=state.projectSubmitted?'#18b832':'';
 }
-function submitProject(){state.projectSubmitted=true;save();renderProjectStatus();toast('Projeto Final confirmado — verifique seu benefício')}
-function renderCertificate(){
-  const ok=unlocked();$('#certificateLocked').classList.toggle('hidden',ok);$('#certificateReady').classList.toggle('hidden',!ok);
-  $('#studentName').value=state.studentName||'';$('#certName').textContent=state.studentName||'Aluno(a)';
-}
-function renderReward(){
-  const ok=unlocked();$('#rewardLocked').classList.toggle('hidden',ok);$('#rewardReady').classList.toggle('hidden',!ok);
-  $('#unlockText').textContent=`${progress()}/20 aulas • Projeto ${state.projectSubmitted?'entregue':'pendente'}`;
-  $('#unlockBar').style.width=`${Math.round(progress()/20*100)}%`;
-}
+function submitProject(){state.projectSubmitted=true; save(); renderProjectStatus(); toast('Projeto Final confirmado — benefício liberado quando o curso estiver 100% concluído')}
+function renderCertificate(){const ok=unlocked(); $('#certificateLocked').classList.toggle('hidden',ok); $('#certificateReady').classList.toggle('hidden',!ok); $('#studentName').value=state.studentName||''; $('#certName').textContent=state.studentName||'Aluno(a)'}
+function renderReward(){const ok=unlocked(); $('#rewardLocked').classList.toggle('hidden',ok); $('#rewardReady').classList.toggle('hidden',!ok); $('#unlockText').textContent=`${progress()}/20 aulas • Projeto ${state.projectSubmitted?'entregue':'pendente'}`; $('#unlockBar').style.width=`${Math.round(progress()/20*100)}%`;}
 function refreshGlobal(){
-  const p=progress(),pct=Math.round(p/20*100);
-  $('#progressPct').textContent=pct+'%';$('#progressText').textContent=`${p} de 20 aulas`;
-  $('#progressRing').style.setProperty('--p',pct);
-  $('#rewardLock').textContent=unlocked()?'✓':'🔒';
-  $('#homeRewardStatus').textContent=unlocked()?'✓ Liberado':'🔒 Bloqueado';
-  renderCards();
+  const p=progress(), pct=Math.round(p/20*100);
+  $('#progressPct').textContent=pct+'%'; $('#progressText').textContent=`${p} de 20 aulas`;
+  $('#progressRing').style.setProperty('--p',pct); $('#rewardLock').textContent=unlocked()?'✓':'🔒'; $('#homeRewardStatus').textContent=unlocked()?'✓ Liberado':'🔒 Bloqueado'; renderCards();
 }
 $('#startBtn').onclick=()=>openLesson(state.lastLesson||1);
 $('#continueBtn').onclick=()=>openLesson(state.lastLesson||1);
@@ -128,8 +205,8 @@ $$('[data-go]').forEach(b=>b.onclick=()=>switchView(b.dataset.go));
 $$('.nav-item').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
 $('#submitProjectBtn').onclick=submitProject;
-$('#studentName').oninput=e=>{state.studentName=e.target.value;$('#certName').textContent=e.target.value||'Aluno(a)';save()};
+$('#studentName').oninput=e=>{state.studentName=e.target.value; $('#certName').textContent=e.target.value||'Aluno(a)'; save()};
 $('#printCertBtn').onclick=()=>window.print();
-window.addEventListener('scroll',()=>{if(currentLesson){const art=$('#lessonArticle').getBoundingClientRect();$('#stickyLessonNav').classList.toggle('hidden',art.bottom<180)}});
+window.addEventListener('scroll',()=>{if(currentLesson){const art=$('#lessonArticle').getBoundingClientRect(); $('#stickyLessonNav').classList.toggle('hidden',art.bottom<180)}});
 refreshGlobal();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
