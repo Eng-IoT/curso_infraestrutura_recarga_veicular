@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#39ff14">
-<meta name="description" content="Formação Profissional em Projetos de Infraestrutura de Recarga Veicular">
+<meta name="description" content="Formação Profissional — Instalador de Carregadores Veiculares e Infraestrutura de Recarga">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="styles.css">
-<title>Projetista de Infraestrutura de Recarga Veicular</title>
+<title>Instalador de Carregadores Veiculares e Infraestrutura de Recarga</title>
 </head>
 <body>
 <div id="app">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <img src="assets/logo-joelson.jpeg" alt="Joelson Mendes">
-      <div><strong>FORMAÇÃO</strong><small>RECARGA VEICULAR</small></div>
+      <div><strong>FORMAÇÃO</strong><small>INSTALAÇÃO • SAVE</small></div>
     </div>
     <div class="side-progress">
       <div class="ring" id="progressRing"><span id="progressPct">0%</span></div>
@@ -23,6 +23,7 @@
     <nav>
       <button class="nav-item active" data-view="home">⌂ <span>Início</span></button>
       <button class="nav-item" data-view="course">▦ <span>Microaulas</span></button>
+      <button class="nav-item" data-view="wiring">⌁ <span>Laboratório de Ligações</span></button>
       <button class="nav-item" data-view="project">⌘ <span>Projeto Final</span></button>
       <button class="nav-item" data-view="profile">◉ <span>Meus dados</span></button>
       <button class="nav-item" data-view="certificate">▤ <span>Certificado</span></button>
@@ -38,7 +39,7 @@
       <button id="menuBtn" class="icon-btn">☰</button>
       <div>
         <h1 id="pageTitle">Formação Profissional</h1>
-        <p id="pageSubtitle">Projetos de Infraestrutura de Recarga Veicular • V6</p>
+        <p id="pageSubtitle">Instalador de Carregadores Veiculares e Infraestrutura de Recarga • V9</p>
       </div>
       <button class="btn outline" id="continueBtn">Continuar curso →</button>
     </header>
@@ -46,9 +47,9 @@
     <section id="view-home" class="view active">
       <div class="hero">
         <div class="hero-copy">
-          <span class="kicker">V6 • 80 HORAS • 20 MICROAULAS • PROJETO APLICADO • CERTIFICAÇÃO DIGITAL</span>
-          <h2>Projetista de <span>Infraestrutura de Recarga Veicular</span></h2>
-          <p>Do diagnóstico energético ao projeto executivo: DLM, condomínios, gestão, segurança, fabricantes, normas e comissionamento.</p>
+          <span class="kicker">V9 • 80 HORAS • 20 MICROAULAS • LABORATÓRIO DE LIGAÇÕES • CERTIFICAÇÃO DIGITAL</span>
+          <h2>Instalador de <span>Carregadores Veiculares</span></h2>
+          <p>Da montagem do quadro SAVE ao comissionamento: dimensionamento, proteções, esquemas de ligação, carregadores AC/DC, DLM, condomínios, normas e projeto aplicado.</p>
           <div class="hero-actions">
             <button class="btn primary" id="startBtn">Iniciar formação</button>
             <button class="btn dark" data-go="course">Ver microaulas</button>
@@ -90,6 +91,21 @@
       <div id="courseLessons" class="lesson-list"></div>
     </section>
 
+    <section id="view-wiring" class="view">
+      <div class="project-hero wiring-hero">
+        <span class="kicker">LABORATÓRIO PRÁTICO</span>
+        <h2>Biblioteca de Esquemas de Ligação SAVE</h2>
+        <p>Veja o caminho de cada cabo e aprenda a ligar disjuntor, DR/RDC-DD, DPS, barramentos e bornes do carregador. Os esquemas são didáticos e devem ser conferidos com o manual da versão real do equipamento.</p>
+      </div>
+      <div class="wiring-toolbar">
+        <label>Filtrar por aplicação
+          <select id="wiringFilter"><option value="all">Todos</option></select>
+        </label>
+        <div class="wiring-legend"><span><i class="leg l"></i>Fase</span><span><i class="leg n"></i>Neutro</span><span><i class="leg pe"></i>PE</span></div>
+      </div>
+      <div id="wiringGrid" class="wiring-grid"></div>
+    </section>
+
     <section id="view-lesson" class="view lesson-view">
       <article id="lessonArticle"></article>
       <div class="lesson-end-nav" id="lessonEndNav"></div>
@@ -98,8 +114,8 @@
     <section id="view-project" class="view">
       <div class="project-hero">
         <span class="kicker">PROJETO INTEGRADOR</span>
-        <h2>Projeto Final — Infraestrutura de Recarga Veicular</h2>
-        <p>O aluno deve consolidar todo o percurso em uma entrega técnica que possa integrar seu portfólio profissional.</p>
+        <h2>Projeto Final — Instalação de Carregadores Veiculares e Infraestrutura SAVE</h2>
+        <p>O aluno deve consolidar dimensionamento, quadro de proteção, esquemas de ligação, instalação, testes e comissionamento em uma entrega técnica de portfólio.</p>
       </div>
       <div class="project-grid">
         <article class="panel">
@@ -139,7 +155,7 @@
           <span class="kicker">COMO SERÁ USADO</span>
           <h3>Certificação digital</h3>
           <p>Ao concluir 20/20 microaulas e o Projeto Final, você poderá confirmar os dados, emitir o certificado com código único, QR de consulta e histórico da formação.</p>
-          <div class="profile-security"><b>Privacidade</b><span>O CPF é opcional e não aparece no certificado. Na V6 local, os dados ficam neste dispositivo. O CPF, se informado, poderá constar no certificado conforme sua autorização.</span></div>
+          <div class="profile-security"><b>Privacidade</b><span>O CPF é opcional e não aparece no certificado. Na versão local, os dados ficam neste dispositivo. O CPF, se informado, poderá constar no certificado conforme sua autorização.</span></div>
         </article>
       </div>
     </section>
@@ -170,7 +186,7 @@
       <div id="certificateReady" class="certificate-wrap hidden">
         <div class="cert-toolbar no-print">
           <div><span class="kicker">CERTIFICADO EMITIDO</span><strong id="toolbarCertCode"></strong></div>
-          <div class="toolbar-actions"><button class="btn outline" id="printHistoryBtn">Imprimir histórico</button><button class="btn primary" id="printCertBtn">Certificado + histórico PDF</button></div>
+          <div class="toolbar-actions"><button class="btn outline" id="testQrBtn">Testar QR</button><button class="btn outline" id="printHistoryBtn">Imprimir histórico</button><button class="btn primary" id="printCertBtn">Certificado + histórico PDF</button></div>
         </div>
 
         <div class="certificate-pages" id="certificatePages">
@@ -187,12 +203,14 @@
             </header>
 
             <div class="inst-cert-main">
-              <h1>PROJETOS DE INFRAESTRUTURA<br>DE RECARGA VEICULAR</h1>
+              <h1>INSTALADOR DE CARREGADORES VEICULARES<br><span>E INFRAESTRUTURA DE RECARGA</span></h1>
               <div class="inst-rule"></div>
               <p class="inst-certifies">Certificamos que</p>
               <h2 id="certName">Aluno(a)</h2>
               <p class="inst-cpf" id="certCPF"></p>
-              <p class="inst-copy">concluiu com aproveitamento a <b>Formação Profissional em Projetos de Infraestrutura de Recarga Veicular</b>, com carga horária total de <b>80 horas</b>, na modalidade <b id="certMode"></b>, realizada no período de <b id="certPeriod"></b>, em <b id="certLocation"></b>.</p>
+              <p class="inst-copy inst-copy-intro">concluiu com aproveitamento a</p>
+              <p class="inst-course-line"><b>Formação Profissional — Instalador de Carregadores Veiculares e Infraestrutura de Recarga</b></p>
+              <p class="inst-copy inst-copy-details">com carga horária total de <b>80 horas</b>, na modalidade <b id="certMode"></b>, realizada no período de <b id="certPeriod"></b>, em <b id="certLocation"></b>.</p>
               <p class="inst-result">Resultado: <b>APROVADO(A)</b></p>
               <div class="inst-refstrip">ABNT NBR 17019 • ABNT NBR 5410 • NR-10 • IEC 61851 • IEC 62196 • NDU 042 Energisa</div>
             </div>
@@ -210,7 +228,7 @@
             <div class="cert-frame-cyan"></div>
             <header class="annex-header">
               <img src="assets/logo-joelson.jpeg" alt="Joelson Mendes">
-              <div><span>ANEXO AO CERTIFICADO</span><h2>Conteúdo programático — Projetos de<br>Infraestrutura de Recarga Veicular</h2><small>Certificado nº <b id="annexCode"></b> • Aluno: <b id="historyName"></b></small></div>
+              <div><span>ANEXO AO CERTIFICADO</span><h2>Conteúdo programático — Instalador de Carregadores<br>Veiculares e Infraestrutura de Recarga</h2><small>Certificado nº <b id="annexCode"></b> • Aluno: <b id="historyName"></b></small></div>
               <div class="hours-circle"><b>80</b><span>HORAS</span></div>
             </header>
             <div class="annex-rule"></div>
@@ -225,7 +243,7 @@
                 <div class="meta-card"><small>MODALIDADE</small><strong id="annexMode"></strong><span>Formação profissional</span></div>
                 <div class="meta-card"><small>INSTRUTOR</small><strong id="annexInstructor"></strong><span id="annexInstructorRole"></span></div>
                 <div class="meta-card"><small>RESPONSABILIDADE TÉCNICA</small><strong id="annexResponsible"></strong><span id="annexResponsibleRole"></span><span id="annexArtTrt"></span></div>
-                <div class="meta-card auth-card"><small>CONTROLE DE AUTENTICIDADE</small><strong id="historyCode"></strong><img id="certQr" alt="QR de validação"><span id="certHashShort"></span></div>
+                <div class="meta-card auth-card"><small>CONTROLE DE AUTENTICIDADE</small><strong id="historyCode"></strong><img id="certQr" alt="QR de validação"><span id="certHashShort"></span><span id="qrModeLabel" class="qr-mode-label"></span></div>
               </aside>
             </div>
             <footer class="annex-footer"><span id="annexOrganization"></span><span>Este anexo integra o certificado de conclusão e registra o conteúdo programático.</span></footer>
@@ -268,10 +286,18 @@
     </form>
   </div>
 </div>
+<div id="wiringModal" class="wiring-modal hidden no-print">
+  <div class="wiring-modal-card">
+    <button class="modal-close" id="wiringModalClose" aria-label="Fechar">×</button>
+    <div id="wiringModalBody"></div>
+  </div>
+</div>
 <div id="stickyLessonNav" class="sticky-lesson-nav hidden"></div>
 <div id="toast" class="toast"></div>
 
 <script src="course-data.js"></script>
+<script src="wiring-data.js"></script>
+<script src="qrcode-local.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

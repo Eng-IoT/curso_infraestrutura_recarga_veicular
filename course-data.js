@@ -94,8 +94,8 @@ window.COURSE_LESSONS = [
   {
     "id": 2,
     "num": "02",
-    "title": "Tipos, Modos e Famílias de Carregadores VE",
-    "description": "Estudo dos carregadores AC e DC, exemplos de fabricantes e aplicações usuais.",
+    "title": "Carregadores VE: Tipos, Potências e Aplicações",
+    "description": "Conheça carregadores AC/DC, potências usuais, aplicações e a biblioteca prática de ligações por topologia e fabricante.",
     "image": "fabricantes-carregadores.webp",
     "objectives": [
       "Diferenciar carregadores AC e DC.",
@@ -185,6 +185,12 @@ window.COURSE_LESSONS = [
           "Conector, ambiente, conectividade e estratégia de uso"
         ]
       ]
+    ],
+    "technicalSections": [
+      {
+        "title": "Potência não define sozinha o esquema de ligação",
+        "html": "<p>Dois carregadores de 7,4 kW podem exigir esquemas diferentes se um for 230 V L+N e outro operar em 220 V fase-fase. O aluno deve sempre cruzar <b>potência + tensão + número de fases + topologia da rede + manual do modelo</b>.</p>"
+      }
     ]
   },
   {
@@ -970,7 +976,7 @@ window.COURSE_LESSONS = [
         "Limita a potência simultânea do conjunto",
         [
           "Aumenta o fator de potência automaticamente sempre",
-          "Cria energia adicional",
+          "Limita a potência simultânea do conjunto",
           "Elimina a curva de carga",
           "Troca o tipo de conector"
         ]
@@ -1015,8 +1021,8 @@ window.COURSE_LESSONS = [
   {
     "id": 11,
     "num": "11",
-    "title": "Dimensionamento dos Circuitos dos Carregadores",
-    "description": "Corrente de projeto, condutores, eletrodutos e critérios de instalação.",
+    "title": "Dimensionamento e Montagem do Circuito do Carregador",
+    "description": "Dimensione corrente, condutores, proteção e aprenda a transformar o memorial de cálculo em um circuito fisicamente montável.",
     "image": "save-ferramenta.png",
     "objectives": [
       "Calcular corrente de projeto dos circuitos.",
@@ -1032,8 +1038,8 @@ window.COURSE_LESSONS = [
       "Queda de tensão pode governar a seção em distâncias longas."
     ],
     "formula": "I = P/(V×FP)  |  I = P/(√3×V×FP)",
-    "example": "Para um carregador de 7,4 kW em 220 V monofásico e FP≈1, a corrente de projeto é aproximadamente 33,6 A.",
-    "activity": "Dimensione preliminarmente o circuito de um carregador de 11 kW trifásico considerando 380 V e registre as premissas do método de instalação.",
+    "example": "Para um carregador AC de 7,4 kW em 230 V e FP≈1, a corrente de projeto é aproximadamente I = 7.400/230 ≈ 32,2 A. Em redes brasileiras de 220 V fase-fase, a topologia dos condutores ativos e das proteções deve seguir o esquema real da instalação; não se deve presumir a existência de neutro.",
+    "activity": "Dimensione um SAVE de 7,4 kW para a topologia indicada pelo instrutor e, depois, selecione na Biblioteca de Ligações o esquema correspondente. Entregue memorial de cálculo + diagrama unifilar + multifilar do circuito.",
     "norms": [
       "ABNT NBR 5410",
       "ABNT NBR 17019"
@@ -1105,8 +1111,18 @@ window.COURSE_LESSONS = [
     "simulatorType": "circuit",
     "technicalSections": [
       {
+        "title": "Do cálculo para a montagem",
+        "html": "<p>O dimensionamento só está completo quando o aluno consegue traduzir o cálculo em um circuito: origem do alimentador, número de condutores, polos do disjuntor, dispositivo diferencial, barramentos, PE, DPS e bornes do SAVE. A seção <b>Laboratório de Ligações</b> da plataforma apresenta esquemas de 3,7; 7,4; 11 e 22 kW, além de topologias fase-neutro e fase-fase.</p>"
+      },
+      {
         "title": "Sequência de cálculo do circuito terminal",
         "html": "<div class=\"calc-steps\"><b>1. Corrente de projeto</b><br>Monofásico: I<sub>b</sub>=P/(V×FP×η)<br>Trifásico: I<sub>b</sub>=P/(√3×V×FP×η)<br><br><b>2. Capacidade corrigida do condutor</b><br>I<sub>z,corr</sub>=I<sub>z,tabela</sub>×F<sub>temp</sub>×F<sub>agr</sub>×F<sub>outros</sub><br><br><b>3. Coordenação</b><br>I<sub>b</sub> ≤ I<sub>n</sub> ≤ I<sub>z,corr</sub></div><p class=\"tech-note\">O laboratório abaixo pede que o aluno informe Iz da tabela/método de instalação adotado. Assim a plataforma não substitui a tabela normativa: ela ensina a verificar a coordenação.</p>"
+      }
+    ],
+    "extraSections": [
+      {
+        "title": "Atenção à topologia 220/230 V",
+        "html": "<div class=\"warning-box\"><b>Não confunda “monofásico” com “fase + neutro”.</b><br>Um SAVE de 220/230 V pode ser alimentado por fase-neutro ou por dois condutores ativos, conforme o sistema de distribuição e o equipamento. O diagrama, o seccionamento, os polos de proteção e a identificação dos condutores devem representar a rede real do local.</div>"
       }
     ]
   },
@@ -1206,8 +1222,8 @@ window.COURSE_LESSONS = [
   {
     "id": 13,
     "num": "13",
-    "title": "Proteções SAVE: Disjuntor, DR, RDC-DD e DPS",
-    "description": "Dimensionamento e seleção de proteção contra sobrecorrente, corrente residual CC/CA e surtos em carregadores VE.",
+    "title": "Quadro Elétrico SAVE: Disjuntor, DR/RDC-DD, DPS e Ligações",
+    "description": "Aprenda função, seleção e ligação física dos componentes de proteção do quadro que alimenta o carregador veicular.",
     "image": "save-ferramenta.png",
     "objectives": [
       "Selecionar disjuntor, DR e DPS com critério técnico.",
@@ -1217,16 +1233,15 @@ window.COURSE_LESSONS = [
     ],
     "theory": "<p>A proteção de um circuito SAVE precisa ser estudada em camadas. O disjuntor protege o circuito contra sobrecorrente e deve ser coordenado com a corrente de projeto e a capacidade do condutor. O dispositivo diferencial residual protege contra correntes de fuga, mas <b>o tipo do DR importa</b> porque carregadores de veículos possuem eletrônica de potência e podem produzir componentes residuais contínuas.</p><p>O <b>DR tipo AC</b> responde à corrente residual alternada senoidal e não deve ser adotado como solução automática para SAVE. O <b>tipo A</b> responde a corrente alternada e contínua pulsante. O <b>tipo F</b> atende formas de onda adicionais associadas a determinadas cargas com conversores, porém não substitui automaticamente o tipo exigido pelo fabricante. O <b>tipo B</b> é adequado também para corrente residual contínua lisa.</p><p>Em carregamento Modo 3 existe ainda o conceito de <b>RDC-DD</b> — residual direct current detecting device — tratado pela IEC 62955. O seu papel é detectar corrente residual contínua associada ao carregamento. Quando o fabricante comprova detecção CC de 6 mA integrada e especifica o uso de DR tipo A a montante, essa combinação pode ser adotada conforme o manual e as normas aplicáveis. <b>Não generalize:</b> se a detecção CC for desconhecida ou ausente, o projetista deve avaliar a solução exigida pela norma e pelo fabricante, o que pode incluir DR tipo B.</p><p>Exemplos oficiais reforçam esse raciocínio. O manual ABB Terra AC informa proteção a montante com RCD tipo A mínimo, corrente residual nominal de até 30 mA, e monitoramento interno de corrente de falha CC acima de 6 mA. A Schneider Electric informa que o EVlink Home incorpora RDC-DD de 6 mA e requer ao menos RCD tipo A com corrente diferencial nominal não superior a 30 mA.</p><p>Para surtos, o DPS deve ser especificado pelo <b>tipo</b> e pelos seus parâmetros elétricos. Tipo 1 é associado à condução de correntes de impulso de maior energia na origem/entrada quando o risco exige essa proteção; Tipo 2 é amplamente usado nos quadros de distribuição; Tipo 3 é complementar e instalado próximo à carga sensível; e dispositivos Tipo 1+2 combinam funções. Os parâmetros <b>Uc, Up, In, Imax e Iimp</b> precisam ser compreendidos e coordenados com o esquema de aterramento, tensão da instalação e proteção a montante.</p>",
     "highlights": [
-      "DR Tipo AC não é escolha automática para carregadores VE.",
-      "RDC-DD de 6 mA CC pode permitir uso de DR Tipo A quando o fabricante/norma assim especificarem.",
-      "Sem informação sobre detecção CC, não se deve presumir que Tipo A é suficiente.",
-      "DR de 30 mA aparece nos exemplos oficiais ABB/Schneider consultados; confirme o equipamento e o projeto.",
-      "DPS exige análise de Uc, Up, In/Imax e, no Tipo 1, Iimp.",
-      "DPS Tipo 3 é complementar; coordenação a montante continua necessária."
+      "PE não passa pelo DR; segue pelo barramento de proteção ao SAVE.",
+      "DPS é conectado em derivação conforme sua configuração e o esquema de aterramento.",
+      "Condutores ativos do circuito diferencial devem atravessar o dispositivo correspondente.",
+      "Em 220 V fase-fase, não se presume neutro: a topologia deve ser confirmada no equipamento.",
+      "Não misture neutros de circuitos diferentes a jusante de dispositivos diferenciais."
     ],
     "formula": "Ib ≤ In ≤ Iz,corr  |  DR: verificar tipo + IΔn + RDC-DD  |  DPS: Uc, Up, In/Imax, Iimp e coordenação",
     "example": "Exemplo 1 — ABB Terra AC: documentação oficial informa RCD a montante Tipo A mínimo, IΔn ≤ 30 mA e monitoramento interno de corrente CC > 6 mA. Exemplo 2 — Schneider EVlink Home: fabricante informa RDC-DD 6 mA integrado e necessidade de RCD Tipo A com IΔn ≤ 30 mA. A lição é: <b>ler a documentação do modelo específico antes de selecionar o DR.</b>",
-    "activity": "Selecione um modelo real de wallbox. Localize no manual: proteção de sobrecorrente recomendada, tipo e sensibilidade do DR, existência de RDC-DD 6 mA, esquema de aterramento permitido e informações de proteção contra surtos. Monte um diagrama: Rede → DPS → Disjuntor/RCBO → DR/RDC-DD → SAVE → Veículo.",
+    "activity": "Em bancada desenergizada, monte um QD-SAVE didático a partir do esquema fornecido: disjuntor, DR, DPS, barramentos N/PE e borne de saída. Identifique cada condutor, faça inspeção cruzada e só depois execute os testes previstos pelo instrutor.",
     "norms": [
       "ABNT NBR 17019",
       "ABNT NBR 5410",
@@ -1261,62 +1276,86 @@ window.COURSE_LESSONS = [
       [
         "Schneider — DPS Tipo 1/1+2",
         "https://www.se.com/br/pt/product-range/61706-dps-classe-1-e-classe-2-acti9/"
+      ],
+      [
+        "Schneider EVlink Home — manual oficial com diagramas de ligação",
+        "https://ckm-content.se.com/ckmContent/sfc/servlet.shepherd/document/download/0698V00000QMVeUQAX"
+      ],
+      [
+        "WEG WEMOB PARKING — guia oficial de instalação 32 A",
+        "https://static.weg.net/medias/downloadcenter/hbc/he0/WEG-WEMOB-parking-s2s-32a-10012838199-en-es-pt.pdf.pdf"
+      ],
+      [
+        "ABB Terra AC — página oficial de documentação",
+        "https://new.abb.com/ev-charging/terra-ac-wallbox/terra-ac-mid-wallbox"
+      ],
+      [
+        "Wallbox Pulsar Plus Socket — guia oficial",
+        "https://support.wallbox.com/en/knowledge-base/pulsar-plus-socket-online-installation-guide/"
       ]
     ],
     "quiz": [
       [
-        "Qual é a função do RDC-DD em um SAVE Modo 3?",
-        "Detectar corrente residual contínua associada à recarga",
+        "No quadro SAVE, qual condutor não deve atravessar o DR?",
+        "PE (condutor de proteção)",
         [
-          "Substituir o disjuntor geral",
-          "Detectar corrente residual contínua associada à recarga",
-          "Elevar a tensão do veículo",
-          "Medir somente energia ativa"
+          "Neutro do circuito",
+          "PE (condutor de proteção)",
+          "L1",
+          "L2"
         ]
       ],
       [
-        "Quando um fabricante comprova RDC-DD 6 mA integrado e especifica RCD Tipo A a montante, o projetista deve:",
-        "Seguir a combinação indicada pelo fabricante e pelas normas aplicáveis",
+        "Como o DPS deve ser representado didaticamente no quadro de alimentação do SAVE?",
+        "Em derivação, conforme topologia e esquema de aterramento",
         [
-          "Instalar sempre Tipo AC",
-          "Ignorar o manual",
-          "Seguir a combinação indicada pelo fabricante e pelas normas aplicáveis",
-          "Retirar o DR"
+          "Sempre em série com toda a corrente do carregador",
+          "Em derivação, conforme topologia e esquema de aterramento",
+          "No lugar do disjuntor",
+          "Depois do cabo de recarga"
         ]
       ],
       [
-        "Se a proteção CC integrada do carregador é desconhecida, a conduta correta é:",
-        "Consultar o manual e avaliar a solução exigida antes de definir o tipo de DR",
+        "Em uma rede 220 V fase-fase, qual é a atitude correta antes de ligar um wallbox?",
+        "Confirmar que o SAVE admite alimentação fase-fase e usar a topologia real",
         [
-          "Assumir Tipo A automaticamente",
-          "Usar Tipo AC sempre",
-          "Consultar o manual e avaliar a solução exigida antes de definir o tipo de DR",
-          "Instalar qualquer DR disponível"
+          "Adicionar um neutro fictício ao desenho",
+          "Ligar PE como neutro",
+          "Confirmar que o SAVE admite alimentação fase-fase e usar a topologia real",
+          "Usar qualquer borne disponível"
         ]
       ],
       [
-        "Qual parâmetro do DPS representa o nível de proteção de tensão?",
-        "Up",
+        "O que pode causar disparos indevidos de DR ao compartilhar o neutro de dois circuitos a jusante de DRs diferentes?",
+        "O desequilíbrio de corrente percebido pelo dispositivo",
         [
-          "Iimp",
-          "Up",
-          "In apenas",
-          "FP"
+          "O excesso de PE",
+          "O desequilíbrio de corrente percebido pelo dispositivo",
+          "A cor do condutor",
+          "O uso de DPS"
         ]
       ],
       [
-        "O DPS Tipo 3 deve ser entendido como:",
-        "Proteção complementar próxima à carga sensível",
+        "Antes de energizar um quadro SAVE recém-montado, o aluno deve:",
+        "Conferir ligações, torque, continuidade do PE e realizar os testes previstos",
         [
-          "Substituto universal do Tipo 1 e Tipo 2",
-          "Proteção complementar próxima à carga sensível",
-          "Dispositivo de corrente residual",
-          "Disjuntor de sobrecorrente"
+          "Conectar o veículo imediatamente",
+          "Retirar o PE para evitar disparos",
+          "Conferir ligações, torque, continuidade do PE e realizar os testes previstos",
+          "Aumentar o disjuntor sem cálculo"
         ]
       ]
     ],
     "simulatorType": "protection",
     "technicalSections": [
+      {
+        "title": "Ligação física do quadro SAVE — caminho de cada condutor",
+        "html": "<div class=\"wiring-rules\"><p><b>Condutores ativos:</b> os condutores que alimentam o SAVE passam pela proteção contra sobrecorrente e pelo dispositivo diferencial correspondente ao circuito. Em uma alimentação L+N, o neutro associado ao circuito deve atravessar o DR quando o dispositivo monitora L e N; não se deve misturar neutros de circuitos diferentes a jusante do DR.</p><p><b>PE:</b> o condutor de proteção segue pelo barramento PE diretamente ao borne de proteção do SAVE. <b>O PE não atravessa o DR.</b></p><p><b>DPS:</b> o DPS é ligado <b>em derivação</b> entre os condutores da alimentação e o sistema de proteção/aterramento conforme a configuração do DPS, o esquema TT/TN e o projeto. Não se deve ensinar o DPS como se toda a corrente do carregador passasse por ele em série.</p><p><b>220 V fase-fase:</b> quando o SAVE for alimentado por L1+L2 em 220 V, não se deve desenhar neutro automaticamente. É obrigatório confirmar que o equipamento aceita essa topologia.</p></div>"
+      },
+      {
+        "title": "Sequência de montagem didática do QD-SAVE",
+        "html": "<ol class=\"tech-ordered\"><li>Confirmar tensão, topologia da rede e bornes admitidos pelo SAVE.</li><li>Definir Ib, In, Iz, seção, queda de tensão e capacidade de interrupção.</li><li>Montar barramentos N e PE separados conforme a instalação.</li><li>Instalar disjuntor/RCBO e DR conforme projeto e manual.</li><li>Ligar o DPS em derivação, com conexões curtas e configuração compatível com o esquema de aterramento.</li><li>Levar os condutores ativos protegidos aos bornes do SAVE e o PE diretamente ao borne de proteção.</li><li>Conferir torque, identificação, continuidade do PE e ausência de neutros compartilhados indevidamente.</li><li>Realizar testes e comissionamento antes da liberação.</li></ol>"
+      },
       {
         "title": "DR — comparação técnica",
         "html": "<div class=\"tech-table-wrap\"><table class=\"tech-table\"><thead><tr><th>Tipo</th><th>O que detecta</th><th>Uso didático no contexto SAVE</th></tr></thead><tbody><tr><td>AC</td><td>CA senoidal</td><td>Não adotar como solução automática para carregadores com eletrônica de potência.</td></tr><tr><td>A</td><td>CA + CC pulsante</td><td>Pode compor a solução quando o carregador possui detecção CC apropriada e o fabricante/norma permitem.</td></tr><tr><td>F</td><td>Formas adicionais associadas a certas cargas eletrônicas</td><td>Não substitui automaticamente Tipo B ou solução definida pelo fabricante.</td></tr><tr><td>B</td><td>Inclui CC lisa</td><td>Avaliar quando não há proteção CC adequada integrada ou quando exigido pelo projeto/fabricante.</td></tr></tbody></table></div>"
@@ -1979,7 +2018,7 @@ window.COURSE_LESSONS = [
   {
     "id": 20,
     "num": "20",
-    "title": "Projeto Final, Comissionamento e Entrega Técnica",
+    "title": "Comissionamento, Projeto Final e Entrega Técnica",
     "description": "Estrutura da entrega profissional e liberação do SAVE Engenharia.",
     "image": "conclusao.png",
     "objectives": [
@@ -1990,16 +2029,16 @@ window.COURSE_LESSONS = [
       "Validar itens de segurança física, comunicação e gestão antes da entrega.",
       "Organizar o dossiê final do condomínio."
     ],
-    "theory": "<p>A etapa final consolida a jornada do aluno. O projeto deve reunir identificação do empreendimento, levantamento, memória de cálculo, curva de carga, cenários de demanda, DLM quando aplicável, dimensionamento dos circuitos, proteções, diagrama unifilar, lista de materiais e checklist de comissionamento.</p>\n <p>O comissionamento é a ponte entre o projeto e a realidade da obra. O profissional precisa verificar montagem, continuidade do PE, identificação dos circuitos, parametrização dos equipamentos, conferência dos dispositivos de proteção e testes funcionais compatíveis com o escopo da instalação.</p>\n <p>Com a conclusão das microaulas e do projeto final, o aluno libera o acesso ao SAVE Engenharia como ferramenta profissional de apoio, mantendo a filosofia do curso: fundamento primeiro, software depois.</p>",
+    "theory": "<p>A etapa final consolida a jornada do aluno. O projeto deve reunir identificação do empreendimento, levantamento, memória de cálculo, curva de carga, cenários de demanda, DLM quando aplicável, dimensionamento dos circuitos, proteções, diagrama unifilar, lista de materiais e checklist de comissionamento.</p><p>O comissionamento é a ponte entre o projeto e a realidade da obra. O profissional precisa verificar montagem, continuidade do PE, identificação dos circuitos, parametrização dos equipamentos, conferência dos dispositivos de proteção e testes funcionais compatíveis com o escopo da instalação.</p><p>Na plataforma, a conclusão acadêmica exige as 20 microaulas e o Projeto Final. Em seguida, o aluno confirma os dados e <b>emite o certificado</b>. Somente após essa emissão o benefício profissional SAVE Engenharia é desbloqueado.</p>",
     "highlights": [
       "Projeto final é prova de competência aplicada.",
       "Comissionamento e documentação fecham o ciclo.",
       "Checklist final reduz falhas de entrega.",
       "SAVE Engenharia é benefício de conclusão, não substituto do conhecimento."
     ],
-    "formula": "Conclusão = 20 microaulas + projeto final + checklist",
+    "formula": "Conclusão da formação = 20 microaulas + Projeto Final  |  Benefício SAVE = formação concluída + certificado emitido",
     "example": "Uma entrega madura inclui memorial de cálculo, unifilar, lista de materiais, critérios adotados e registro de testes/comissionamento.",
-    "activity": "Finalize seu projeto e marque no sistema cada item do checklist de entrega antes de confirmar a conclusão.",
+    "activity": "Finalize o projeto completo incluindo memória de cálculo, diagrama unifilar, esquema de ligação do quadro SAVE, lista de materiais, checklist de montagem, testes e comissionamento.",
     "norms": [
       "ABNT NBR 17019",
       "ABNT NBR 5410",
@@ -2043,13 +2082,13 @@ window.COURSE_LESSONS = [
         ]
       ],
       [
-        "O SAVE Engenharia é liberado após:",
-        "Conclusão das aulas e do projeto final",
+        "Na plataforma, quando o acesso ao SAVE Engenharia é liberado?",
+        "Após concluir as 20 microaulas, o Projeto Final e emitir o certificado",
         [
-          "Primeiro acesso ao curso",
-          "Conclusão das aulas e do projeto final",
-          "Somente o pagamento",
-          "Apenas a aula 1"
+          "No primeiro acesso ao curso",
+          "Após concluir as 20 microaulas, o Projeto Final e emitir o certificado",
+          "Somente após responder a primeira aula",
+          "Apenas após abrir o aplicativo"
         ]
       ],
       [
@@ -2074,6 +2113,10 @@ window.COURSE_LESSONS = [
       ]
     ],
     "technicalSections": [
+      {
+        "title": "Entregável obrigatório — esquema do quadro SAVE",
+        "html": "<p>O Projeto Final deve incluir o esquema unifilar e o esquema de ligação do QD-SAVE, identificando disjuntor/RCBO, DR/RDC-DD, DPS, barramentos, PE, condutores ativos, seção, corrente nominal e referência do manual do equipamento adotado.</p>"
+      },
       {
         "title": "Comissionamento técnico e operacional",
         "html": "<p>Além das verificações elétricas, uma infraestrutura conectada deve ter seu fluxo operacional testado: autenticação, início e término de sessão, comunicação com plataforma, registro de energia, alarmes, limites do DLM e recuperação após falha de comunicação ou energia.</p>"

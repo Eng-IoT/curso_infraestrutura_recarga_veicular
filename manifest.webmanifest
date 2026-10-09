@@ -1,6 +1,6 @@
 {
-  "name": "Formação V5 - Infraestrutura de Recarga Veicular",
-  "short_name": "Recarga VE V5",
+  "name": "Instalador de Carregadores Veiculares e Infraestrutura de Recarga",
+  "short_name": "Instalador SAVE",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f7faf8",
