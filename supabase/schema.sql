@@ -6,7 +6,7 @@ create table if not exists public.certificates (
   student_email text not null,
   city text,
   uf char(2),
-  course_name text not null default 'Projetos de Infraestrutura de Recarga Veicular',
+  course_name text not null default 'Instalador de Carregadores Veiculares e Infraestrutura de Recarga',
   workload_hours integer not null default 80,
   completion_date date not null,
   verification_hash text unique not null,
